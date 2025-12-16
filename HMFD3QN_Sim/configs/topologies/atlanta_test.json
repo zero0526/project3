@@ -1,0 +1,306 @@
+{
+    "directed": false,
+    "multigraph": false,
+    "graph": {},
+    "nodes": [
+        {
+            "pos": [
+                283.0,
+                248.0
+            ],
+            "type": "cloud",
+            "cpu": 5600,
+            "ram": 80,
+            "hdd": 500,
+            "id": "N1"
+        },
+        {
+            "pos": [
+                451.0,
+                201.0
+            ],
+            "type": "edge",
+            "cpu": 3000,
+            "ram": 20,
+            "hdd": 80,
+            "id": "N2"
+        },
+        {
+            "pos": [
+                516.0,
+                230.0
+            ],
+            "type": "edge",
+            "cpu": 3000,
+            "ram": 20,
+            "hdd": 80,
+            "id": "N3"
+        },
+        {
+            "pos": [
+                324.0,
+                43.0
+            ],
+            "type": "edge",
+            "cpu": 3000,
+            "ram": 20,
+            "hdd": 80,
+            "id": "N4"
+        },
+        {
+            "pos": [
+                459.0,
+                31.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N5"
+        },
+        {
+            "pos": [
+                339.0,
+                151.0
+            ],
+            "type": "edge",
+            "cpu": 3000,
+            "ram": 20,
+            "hdd": 80,
+            "id": "N6"
+        },
+        {
+            "pos": [
+                185.0,
+                323.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N7"
+        },
+        {
+            "pos": [
+                384.0,
+                298.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N8"
+        },
+        {
+            "pos": [
+                318.0,
+                353.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N9"
+        },
+        {
+            "pos": [
+                147.0,
+                403.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N10"
+        },
+        {
+            "pos": [
+                56.0,
+                132.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N11"
+        },
+        {
+            "pos": [
+                253.0,
+                466.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N12"
+        },
+        {
+            "pos": [
+                216.0,
+                59.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N13"
+        },
+        {
+            "pos": [
+                97.0,
+                218.0
+            ],
+            "type": "edge",
+            "cpu": 3000,
+            "ram": 20,
+            "hdd": 80,
+            "id": "N14"
+        },
+        {
+            "pos": [
+                463.0,
+                431.0
+            ],
+            "type": "relay",
+            "cpu": 0,
+            "ram": 0,
+            "hdd": 0,
+            "id": "N15"
+        }
+    ],
+    "links": [
+        {
+            "bandwidth": 587,
+            "latency_prop": 0.005,
+            "source": "N1",
+            "target": "N6"
+        },
+        {
+            "bandwidth": 414,
+            "latency_prop": 0.005,
+            "source": "N1",
+            "target": "N7"
+        },
+        {
+            "bandwidth": 757,
+            "latency_prop": 0.005,
+            "source": "N1",
+            "target": "N8"
+        },
+        {
+            "bandwidth": 677,
+            "latency_prop": 0.005,
+            "source": "N2",
+            "target": "N3"
+        },
+        {
+            "bandwidth": 620,
+            "latency_prop": 0.005,
+            "source": "N2",
+            "target": "N5"
+        },
+        {
+            "bandwidth": 500,
+            "latency_prop": 0.005,
+            "source": "N2",
+            "target": "N6"
+        },
+        {
+            "bandwidth": 632,
+            "latency_prop": 0.005,
+            "source": "N3",
+            "target": "N5"
+        },
+        {
+            "bandwidth": 732,
+            "latency_prop": 0.005,
+            "source": "N3",
+            "target": "N8"
+        },
+        {
+            "bandwidth": 637,
+            "latency_prop": 0.005,
+            "source": "N4",
+            "target": "N5"
+        },
+        {
+            "bandwidth": 430,
+            "latency_prop": 0.005,
+            "source": "N4",
+            "target": "N6"
+        },
+        {
+            "bandwidth": 764,
+            "latency_prop": 0.005,
+            "source": "N6",
+            "target": "N13"
+        },
+        {
+            "bandwidth": 415,
+            "latency_prop": 0.005,
+            "source": "N7",
+            "target": "N10"
+        },
+        {
+            "bandwidth": 654,
+            "latency_prop": 0.005,
+            "source": "N7",
+            "target": "N14"
+        },
+        {
+            "bandwidth": 795,
+            "latency_prop": 0.005,
+            "source": "N8",
+            "target": "N9"
+        },
+        {
+            "bandwidth": 686,
+            "latency_prop": 0.005,
+            "source": "N8",
+            "target": "N15"
+        },
+        {
+            "bandwidth": 701,
+            "latency_prop": 0.005,
+            "source": "N9",
+            "target": "N10"
+        },
+        {
+            "bandwidth": 692,
+            "latency_prop": 0.005,
+            "source": "N9",
+            "target": "N12"
+        },
+        {
+            "bandwidth": 468,
+            "latency_prop": 0.005,
+            "source": "N9",
+            "target": "N15"
+        },
+        {
+            "bandwidth": 496,
+            "latency_prop": 0.005,
+            "source": "N10",
+            "target": "N12"
+        },
+        {
+            "bandwidth": 578,
+            "latency_prop": 0.005,
+            "source": "N11",
+            "target": "N13"
+        },
+        {
+            "bandwidth": 519,
+            "latency_prop": 0.005,
+            "source": "N11",
+            "target": "N14"
+        },
+        {
+            "bandwidth": 630,
+            "latency_prop": 0.005,
+            "source": "N13",
+            "target": "N14"
+        }
+    ]
+}
