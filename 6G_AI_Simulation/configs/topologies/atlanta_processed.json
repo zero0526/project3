@@ -1,0 +1,214 @@
+{
+  "nodes": [
+    {
+      "id": "N1",
+      "type": "cloud",
+      "cpu": 10000,
+      "ram": 128,
+      "hdd": 1000,
+      "energy_coeff": 1e-11
+    },
+    {
+      "id": "N2",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N3",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N4",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N5",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N6",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N7",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N8",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N9",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N10",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N11",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N12",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N13",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N14",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    },
+    {
+      "id": "N15",
+      "type": "edge",
+      "cpu": 3000,
+      "ram": 16,
+      "hdd": 100,
+      "energy_coeff": 5e-11
+    }
+  ],
+  "links": [
+    {
+      "source": "N1",
+      "target": "N6"
+    },
+    {
+      "source": "N1",
+      "target": "N7"
+    },
+    {
+      "source": "N1",
+      "target": "N8"
+    },
+    {
+      "source": "N2",
+      "target": "N3"
+    },
+    {
+      "source": "N2",
+      "target": "N5"
+    },
+    {
+      "source": "N2",
+      "target": "N6"
+    },
+    {
+      "source": "N3",
+      "target": "N5"
+    },
+    {
+      "source": "N3",
+      "target": "N8"
+    },
+    {
+      "source": "N4",
+      "target": "N5"
+    },
+    {
+      "source": "N4",
+      "target": "N6"
+    },
+    {
+      "source": "N6",
+      "target": "N13"
+    },
+    {
+      "source": "N7",
+      "target": "N10"
+    },
+    {
+      "source": "N7",
+      "target": "N14"
+    },
+    {
+      "source": "N8",
+      "target": "N9"
+    },
+    {
+      "source": "N8",
+      "target": "N15"
+    },
+    {
+      "source": "N9",
+      "target": "N10"
+    },
+    {
+      "source": "N9",
+      "target": "N12"
+    },
+    {
+      "source": "N9",
+      "target": "N15"
+    },
+    {
+      "source": "N10",
+      "target": "N12"
+    },
+    {
+      "source": "N11",
+      "target": "N13"
+    },
+    {
+      "source": "N11",
+      "target": "N14"
+    },
+    {
+      "source": "N13",
+      "target": "N14"
+    }
+  ]
+}

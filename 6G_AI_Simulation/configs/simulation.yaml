@@ -1,0 +1,15 @@
+simulation:
+  seed: 42
+  time:
+    slot_duration: 0.1
+    slots_per_frame: 10
+    total_episodes: 200
+  
+  paths:
+    topology_xml: "configs/topologies/atlanta.xml"
+    topology_json: "configs/topologies/atlanta_processed.json"
+    logs: "data/logs/"
+
+  workload:
+    arrival_rate: 30  # Lambda (tasks/slot) for all net
+    zipf_param: 0.8   # level commonality
