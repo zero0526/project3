@@ -1,0 +1,35 @@
+nodes:
+  cloud:
+    type: "cloud"
+    cpu: 5600         # GFLOPS 
+    ram: 80           # GB 
+    hdd: 500          # GB 
+    energy_coeff: 5.0e-10  # 5 * 10^-10 (Table II)
+    
+  edge:
+    type: "edge"
+    cpu: 3500         # GFLOPS 
+    ram: 20           # GB 
+    hdd: 10           # GB 
+    energy_coeff: 5.0e-10  
+    
+  network:
+    type: "network"
+    cpu: 1000         # GFLOPS (avg[800, 1200])
+    ram: 10           # GB
+    hdd: 10           # GB
+    energy_coeff: 5.0e-10
+
+links:
+  # paper: 50-100 MB/s -> 400-800 Mbps
+  default_bandwidth: 600    # Mbps (600 Mbps = 75 MB/s)
+  propagation_delay: 0.005  # 5ms 
+  
+  # (Table II: 0.2W)
+  transmission_power: 0.2   # Watts ( E_tr)
+
+# Cấu hình Cold Start (Table II)
+cold_start:
+  energy: 0.2        # Watts (epsilon_cold)
+  latency_min: 0.15  # Seconds
+  latency_max: 0.85  # Seconds

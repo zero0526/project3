@@ -1,0 +1,288 @@
+services:
+  - id: 0
+    name: "Image Classification"
+    omega: 1        
+    size: 550       
+    input_data_size: 2.0 # MB (1 img HD)
+    deadline: 0.5   
+    models:
+      - id: 0
+        name: "MobileNetV2"
+        workload: 0.6
+        accuracy: 0.71
+      - id: 1
+        name: "EfficientNet-B0"
+        workload: 1.0
+        accuracy: 0.77
+      - id: 2
+        name: "ResNet50"
+        workload: 4.1
+        accuracy: 0.85
+      - id: 3
+        name: "InceptionV3"
+        workload: 5.7
+        accuracy: 0.88
+      - id: 4
+        name: "ViT-Base" # Vision Transformer
+        workload: 16.8
+        accuracy: 0.92
+
+  # --- SERVICE 1: OBJECT DETECTION () ---
+  - id: 1
+    name: "Object Detection"
+    omega: 0         # Occasional -> HDD
+    size: 600        # MB (Model heavy)
+    input_data_size: 4.0 # MB
+    deadline: 1.0    
+    models:
+      - id: 0
+        name: "YOLOv5-Nano"
+        workload: 1.5
+        accuracy: 0.63
+      - id: 1
+        name: "SSD-MobileNet"
+        workload: 2.8
+        accuracy: 0.72
+      - id: 2
+        name: "YOLOv5-Large"
+        workload: 8.5
+        accuracy: 0.86
+      - id: 3
+        name: "Faster-RCNN"
+        workload: 14.2
+        accuracy: 0.91
+      - id: 4
+        name: "Mask-RCNN" 
+        workload: 18.5
+        accuracy: 0.94
+
+  - id: 2
+    name: "Semantic Segmentation"
+    omega: 1
+    size: 800
+    input_data_size: 5.0 # MB 
+    deadline: 0.8
+    models:
+      - id: 0
+        name: "UNet-Mobile"
+        workload: 3.5
+        accuracy: 0.78
+      - id: 1
+        name: "SegNet"
+        workload: 6.2
+        accuracy: 0.82
+      - id: 2
+        name: "PSPNet"
+        workload: 10.5
+        accuracy: 0.89
+      - id: 3
+        name: "DeepLabV3+"
+        workload: 15.0
+        accuracy: 0.93
+      - id: 4
+        name: "HRNet-OCR"
+        workload: 22.0
+        accuracy: 0.96
+
+  # --- SERVICE 3: SPEECH RECOGNITION (use RAM - virtual assistance) ---
+  - id: 3
+    name: "Speech Recognition"
+    omega: 1
+    size: 2290
+    input_data_size: 0.5 # MB wav
+    deadline: 0.6
+    models:
+      - id: 0
+        name: "DeepSpeech2-Lite"
+        workload: 2.5
+        accuracy: 0.82
+      - id: 1
+        name: "QuartzNet"
+        workload: 4.8
+        accuracy: 0.88
+      - id: 2
+        name: "Jasper"
+        workload: 7.5
+        accuracy: 0.91
+      - id: 3
+        name: "Wav2Vec2-Base"
+        workload: 11.2
+        accuracy: 0.94
+      - id: 4
+        name: "Conformer-Large"
+        workload: 19.5
+        accuracy: 0.97
+
+  # --- SERVICE 4: TEXT CLASSIFICATION (use RAM - Spam Filter) ---
+  - id: 4
+    name: "Text Classification"
+    omega: 1
+    size: 2570
+    input_data_size: 0.1 # MB (Text light)
+    deadline: 0.3
+    models:
+      - id: 0
+        name: "DistilBERT"
+        workload: 3.0
+        accuracy: 0.87
+      - id: 1
+        name: "ALBERT"
+        workload: 4.5
+        accuracy: 0.89
+      - id: 2
+        name: "BERT-Base"
+        workload: 9.0
+        accuracy: 0.92
+      - id: 3
+        name: "RoBERTa"
+        workload: 11.5
+        accuracy: 0.94
+      - id: 4
+        name: "XLNet-Large"
+        workload: 18.0
+        accuracy: 0.96
+
+  # --- SERVICE 5: MACHINE TRANSLATION (use HDD -
+  - id: 5
+    name: "Machine Translation"
+    omega: 0
+    size: 2200         # GB (heavy Model -> HDD)
+    input_data_size: 0.2
+    deadline: 1.5      
+    models:
+      - id: 0
+        name: "LSTM-Seq2Seq"
+        workload: 5.0
+        accuracy: 0.82
+      - id: 1
+        name: "MarianMT"
+        workload: 9.5
+        accuracy: 0.88
+      - id: 2
+        name: "Transformer-Base"
+        workload: 14.0
+        accuracy: 0.92
+      - id: 3
+        name: "T5-Small"
+        workload: 18.5
+        accuracy: 0.94
+      - id: 4
+        name: "T5-Large"
+        workload: 35.0
+        accuracy: 0.98
+
+  # --- SERVICE 6: ANOMALY DETECTION (use RAM - IoT Sensor) ---
+  - id: 6
+    name: "Anomaly Detection"
+    omega: 1
+    size: 106          
+    input_data_size: 0.05 # Sensor data
+    deadline: 0.1      # fast
+    models:
+      - id: 0
+        name: "IsolationForest"
+        workload: 0.1
+        accuracy: 0.75
+      - id: 1
+        name: "OC-SVM"
+        workload: 0.3
+        accuracy: 0.79
+      - id: 2
+        name: "AutoEncoder-Dense"
+        workload: 1.2
+        accuracy: 0.85
+      - id: 3
+        name: "LSTM-AE"
+        workload: 3.5
+        accuracy: 0.89
+      - id: 4
+        name: "GAN-Anomaly"
+        workload: 6.0
+        accuracy: 0.92
+
+  # --- SERVICE 7: FACE RECOGNITION (use RAM - Check in) ---
+  - id: 7
+    name: "Face Recognition"
+    omega: 1
+    size: 1020
+    input_data_size: 3.0
+    deadline: 0.5
+    models:
+      - id: 0
+        name: "FaceNet-Mobile"
+        workload: 2.8
+        accuracy: 0.88
+      - id: 1
+        name: "SphereFace"
+        workload: 5.5
+        accuracy: 0.91
+      - id: 2
+        name: "ArcFace"
+        workload: 8.0
+        accuracy: 0.94
+      - id: 3
+        name: "CosFace"
+        workload: 9.2
+        accuracy: 0.95
+      - id: 4
+        name: "AdaFace"
+        workload: 12.5
+        accuracy: 0.97
+
+  # --- SERVICE 8: OBJECT TRACKING (use RAM - Surveillance) ---
+  - id: 8
+    name: "Object Tracking"
+    omega: 1
+    size: 875
+    input_data_size: 5.0 # Video frame
+    deadline: 0.7
+    models:
+      - id: 0
+        name: "KCF"
+        workload: 1.0
+        accuracy: 0.70
+      - id: 1
+        name: "SORT"
+        workload: 2.5
+        accuracy: 0.78
+      - id: 2
+        name: "DeepSORT"
+        workload: 6.8
+        accuracy: 0.88
+      - id: 3
+        name: "ByteTrack"
+        workload: 8.5
+        accuracy: 0.91
+      - id: 4
+        name: "FairMOT"
+        workload: 14.0
+        accuracy: 0.93
+
+  # --- SERVICE 9: POSE ESTIMATION (use RAM - Gaming/AR) ---
+  - id: 9
+    name: "Pose Estimation"
+    omega: 1
+    size: 1050
+    input_data_size: 4.0
+    deadline: 0.6
+    models:
+      - id: 0
+        name: "BlazePose"
+        workload: 3.0
+        accuracy: 0.81
+      - id: 1
+        name: "PoseNet"
+        workload: 5.2
+        accuracy: 0.85
+      - id: 2
+        name: "OpenPose-Light"
+        workload: 9.0
+        accuracy: 0.89
+      - id: 3
+        name: "AlphaPose"
+        workload: 13.5
+        accuracy: 0.93
+      - id: 4
+        name: "HRNet-Pose"
+        workload: 18.0
+        accuracy: 0.96
