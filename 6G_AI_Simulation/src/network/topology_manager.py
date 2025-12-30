@@ -2,7 +2,7 @@ import networkx as nx
 import json
 import yaml
 import os
-from channel_model import ChannelModel
+from .channel_model import ChannelModel
 
 class TopologyManager:
     def __init__(self, json_path, network_params_path):

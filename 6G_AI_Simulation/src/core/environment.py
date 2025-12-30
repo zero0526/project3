@@ -11,6 +11,7 @@ from src.core.time_manager import TimeManager
 from src.utils.monitor import SimulationMonitor
 from src.utils.config_loader import cfg
 from src.entities.task import Task
+from src import hp
 
 class HMFD3QNEnv(gym.Env):
     def __init__(self, config_path):
@@ -79,8 +80,7 @@ class HMFD3QNEnv(gym.Env):
         for node in self.nodes.values():
             node.reset()
             
-        # [QUAN TRỌNG] Sinh task khởi tạo cho Slot 0
-        # Để Agent có cái mà xử lý ngay tại step đầu tiên
+        # init task for first Slot 0
         self.task_buffer = self.workload_gen.generate(0)
         
         return self._get_observation(), {"new_tasks": self.task_buffer}
@@ -168,7 +168,7 @@ class HMFD3QNEnv(gym.Env):
             done_tasks, node_energy = node.process_timeslot(
                 current_time_elapsed=self.time_manager.time_elapsed,
                 slot_duration=self.time_manager.slot_duration,
-                V_param=100.0 # Có thể đưa vào config
+                V_param=hp.V
             )
             
             step_energy += node_energy

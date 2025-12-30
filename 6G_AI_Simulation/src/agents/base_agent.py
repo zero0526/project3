@@ -25,14 +25,11 @@ class HMFD3QNBaseAgent:
         """
         Chính sách Boltzmann (Eq. 45): pi(a|s) = exp(Q/zeta) / sum(exp(Q/zeta))
         """
-        # Chuyển Q-values sang numpy
         q_vals = q_values.detach().cpu().numpy().flatten()
         
-        # Tính toán xác suất (có xử lý ổn định số học)
         exp_q = np.exp((q_vals - np.max(q_vals)) / temperature)
         probs = exp_q / np.sum(exp_q)
         
-        # Chọn hành động dựa trên xác suất
         action = np.random.choice(len(q_vals), p=probs)
         return action
 

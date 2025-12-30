@@ -1,4 +1,3 @@
-# File: src/entities/terminal.py
 
 class Terminal:
     def __init__(self, term_id, location_node_id, config=None):

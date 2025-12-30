@@ -2,7 +2,6 @@ import json
 import os
 import csv
 import numpy as np
-from src.core import HMFD3QNEnv
 
 class SimulationMonitor:
     def __init__(self, log_dir="data/"):
@@ -17,7 +16,7 @@ class SimulationMonitor:
             writer = csv.writer(f)
             writer.writerow(["step", "total_energy", "qos_violations", "completed_tasks", "avg_cpu_util"])
 
-    def log_step(self, env: HMFD3QNEnv, step: int, info: dict):
+    def log_step(self, env, step: int, info: dict):
         """
         Ghi log trạng thái hiện tại của Environment.
         """
