@@ -1,4 +1,3 @@
-# File: src/utils/logger.py
 import logging
 import os
 import sys

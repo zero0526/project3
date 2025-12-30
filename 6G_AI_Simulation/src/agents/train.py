@@ -6,9 +6,12 @@ from typing import Dict, List, Any
 
 from src import hp
 from src.utils.logger import logger
+from src.core.environment import HMFD3QNEnv
+from src.agents.lower_agent import LowerAgent
+from src.agents.upper_agent import UpperAgent
 
 class HMFD3QNTrainer:
-    def __init__(self, env, upper_agent, lower_agent, device="cpu"):
+    def __init__(self, env: HMFD3QNEnv, upper_agent: UpperAgent, lower_agent: LowerAgent, device="cpu"):
         """
         Quản lý quy trình huấn luyện HMFD3QN.
         
@@ -64,31 +67,19 @@ class HMFD3QNTrainer:
         pbar = tqdm(range(hp.STEPS_PER_EPISODE), desc=f"Ep {episode_idx+1}", leave=False)
         
         for step in pbar:
-            # -------------------------------------------------------
-            # 1. UPPER LEVEL (Service Placement) - Đầu Frame
-            # -------------------------------------------------------
             upper_actions_dict = {}
             if self.env.time_manager.is_new_frame():
                 upper_actions_dict = self._process_upper_level(obs)
 
-            # -------------------------------------------------------
-            # 2. LOWER LEVEL (Task Offloading) - Mỗi Slot
-            # -------------------------------------------------------
             lower_actions_dict, lower_exps, slot_actions_map = self._process_lower_level(current_tasks)
 
-            # -------------------------------------------------------
-            # 3. EXECUTE STEP
-            # -------------------------------------------------------
+
             next_obs, reward, done, truncated, info = self.env.step(lower_actions_dict, upper_actions_dict)
             next_tasks = info['new_tasks']
 
-            # Update Metrics
             total_reward += reward
             total_qos += info['qos_violations']
 
-            # -------------------------------------------------------
-            # 4. TRAINING & EXPERIENCE STORING
-            # -------------------------------------------------------
             
             # A. Train Lower Agent (Ngay lập tức)
             l_loss_val = self._train_lower_agent(lower_exps, slot_actions_map, reward)
@@ -117,9 +108,6 @@ class HMFD3QNTrainer:
             "lower_loss": lower_loss
         }
 
-    # =========================================================================
-    #  HELPER METHODS (LOGIC TÁCH BIỆT)
-    # =========================================================================
 
     def _process_upper_level(self, obs: Dict) -> Dict:
         """Logic ra quyết định cho Upper Agent."""

@@ -11,11 +11,11 @@ class ComputingNode:
     def __init__(self, node_id, specs):
         self.id = node_id
         self.specs = specs
-        
         self.cpu_capacity = specs['cpu']      # f_v(tau)
         self.ram_capacity = specs['ram']
         self.hdd_capacity = specs['hdd']
         self.energy_coeff = specs['energy_coeff'] # epsilon_c
+        self.type= specs['type']
         
         # State
         self.placed_services = {} 
@@ -23,6 +23,7 @@ class ComputingNode:
         self.backlogs = {}        
         self.service_profiles = {}
         self.slot_arrival_workload = {}
+        self.last_cpu_allocations = {}
         
         self.used_ram = 0.0
         self.used_hdd = 0.0
@@ -35,6 +36,7 @@ class ComputingNode:
         self.queues = {}
         self.backlogs = {}
         self.slot_arrival_workload = {}
+        self.last_cpu_allocations = {}
         self.used_ram = 0.0
         self.used_hdd = 0.0
 
@@ -223,8 +225,21 @@ class ComputingNode:
                 else:
                     task.remaining_workload -= remaining_cap
                     remaining_cap = 0
-        
-        # Reset tracking arrival
+
+        self.last_cpu_allocations = {} 
+        for i, sid in enumerate(active_svcs):
+            self.last_cpu_allocations[sid] = f_alloc_vec[i]
+            
         self.slot_arrival_workload = {} 
         
         return completed_tasks, total_energy
+    
+    def get_observation_state(self, service_id):
+        """
+        Trả về trạng thái cụ thể cho 1 service (Eq. 51):
+        1. Queue Backlog (Q)
+        2. Last CPU Allocation (f)
+        """
+        q = self.backlogs.get(service_id, 0.0)
+        f = self.last_cpu_allocations.get(service_id, 0.0)
+        return [q, f]

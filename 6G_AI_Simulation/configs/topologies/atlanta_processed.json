@@ -3,122 +3,94 @@
     {
       "id": "N1",
       "type": "cloud",
-      "cpu": 10000,
-      "ram": 128,
-      "hdd": 1000,
-      "energy_coeff": 1e-11
+      "cpu": 5600,
+      "ram": 80,
+      "hdd": 500,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N2",
       "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "cpu": 3500,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N3",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "relay"
     },
     {
       "id": "N4",
       "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "cpu": 3500,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N5",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "relay"
     },
     {
       "id": "N6",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "network",
+      "cpu": 1000,
+      "ram": 10,
+      "hdd": 10,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N7",
       "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "cpu": 3500,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N8",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "relay"
     },
     {
       "id": "N9",
       "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "cpu": 3500,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N10",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "relay"
     },
     {
       "id": "N11",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "network",
+      "cpu": 1000,
+      "ram": 10,
+      "hdd": 10,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N12",
       "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "cpu": 3500,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coeff": 5e-10
     },
     {
       "id": "N13",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "relay"
     },
     {
       "id": "N14",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "relay"
     },
     {
       "id": "N15",
-      "type": "edge",
-      "cpu": 3000,
-      "ram": 16,
-      "hdd": 100,
-      "energy_coeff": 5e-11
+      "type": "relay"
     }
   ],
   "links": [

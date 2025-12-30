@@ -14,7 +14,7 @@ class LowerAgent(HMFD3QNBaseAgent):
         # Hoặc đơn giản hóa: Chọn Node thôi, Model chọn bằng logic (Greedy)
         # Theo bài báo: "Action ... including task offloading node AND model selection"
         self.action_dim = num_nodes * num_models_per_service
-        
+        self.local_state_dim = 3 + (2 * num_nodes)
         # Mean Field: Vector trung bình hành động của các terminal khác
         self.mf_dim = self.action_dim 
 

@@ -1,4 +1,3 @@
-# File: src/mechanisms/kkt_solver.py
 import numpy as np
 
 class KKTSolver:
