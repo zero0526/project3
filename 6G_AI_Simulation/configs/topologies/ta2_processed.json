@@ -1,0 +1,1634 @@
+{
+  "network_name": "atlanta",
+  "created_at": "Simulation Pre-processing",
+  "stats": {
+    "total_nodes": 65,
+    "total_links": 108,
+    "node_types": {
+      "relay": 57,
+      "edge": 5,
+      "network": 2,
+      "cloud": 1
+    }
+  },
+  "global_config": {
+    "energy": {
+      "computation_coef": "5e-10",
+      "cold_start": 0.2,
+      "tranmission_coef": 0.2
+    },
+    "links_capacity": {
+      "min": 50,
+      "max": 100
+    },
+    "cold_start_time": {
+      "min": 0.15,
+      "max": 0.85
+    }
+  },
+  "nodes": [
+    {
+      "id": "N1",
+      "type": "relay",
+      "coordinates": {
+        "x": 243.0,
+        "y": 574.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N2",
+      "type": "relay",
+      "coordinates": {
+        "x": 264.0,
+        "y": 363.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N3",
+      "type": "relay",
+      "coordinates": {
+        "x": 106.0,
+        "y": 465.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N4",
+      "type": "edge",
+      "coordinates": {
+        "x": 76.0,
+        "y": 202.0
+      },
+      "cpu": 3144.68,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N5",
+      "type": "edge",
+      "coordinates": {
+        "x": 78.0,
+        "y": 353.0
+      },
+      "cpu": 3287.11,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N6",
+      "type": "relay",
+      "coordinates": {
+        "x": 208.0,
+        "y": 207.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N7",
+      "type": "relay",
+      "coordinates": {
+        "x": 77.0,
+        "y": 602.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N8",
+      "type": "network",
+      "coordinates": {
+        "x": 221.0,
+        "y": 73.0
+      },
+      "cpu": 1147.38,
+      "ram": 10,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N9",
+      "type": "relay",
+      "coordinates": {
+        "x": 139.0,
+        "y": 349.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N10",
+      "type": "network",
+      "coordinates": {
+        "x": 245.0,
+        "y": 308.0
+      },
+      "cpu": 850.91,
+      "ram": 10,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N11",
+      "type": "edge",
+      "coordinates": {
+        "x": 142.0,
+        "y": 121.0
+      },
+      "cpu": 3482.67,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N12",
+      "type": "edge",
+      "coordinates": {
+        "x": 67.0,
+        "y": 87.0
+      },
+      "cpu": 3499.43,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N13",
+      "type": "edge",
+      "coordinates": {
+        "x": 217.0,
+        "y": 716.0
+      },
+      "cpu": 3576.59,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N14",
+      "type": "relay",
+      "coordinates": {
+        "x": 222.0,
+        "y": 606.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N15",
+      "type": "cloud",
+      "coordinates": {
+        "x": 21.0,
+        "y": 214.0
+      },
+      "cpu": 5600.0,
+      "ram": 80,
+      "hdd": 80,
+      "energy_coef": "5e-10",
+      "is_computing": true
+    },
+    {
+      "id": "N16",
+      "type": "relay",
+      "coordinates": {
+        "x": 112.0,
+        "y": 638.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N17",
+      "type": "relay",
+      "coordinates": {
+        "x": 190.0,
+        "y": 172.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N18",
+      "type": "relay",
+      "coordinates": {
+        "x": 21.0,
+        "y": 673.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N19",
+      "type": "relay",
+      "coordinates": {
+        "x": 238.0,
+        "y": 155.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N20",
+      "type": "relay",
+      "coordinates": {
+        "x": 61.0,
+        "y": 387.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N21",
+      "type": "relay",
+      "coordinates": {
+        "x": 96.0,
+        "y": 388.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N22",
+      "type": "relay",
+      "coordinates": {
+        "x": 164.0,
+        "y": 579.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N23",
+      "type": "relay",
+      "coordinates": {
+        "x": 213.0,
+        "y": 651.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N24",
+      "type": "relay",
+      "coordinates": {
+        "x": 15.0,
+        "y": 309.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N25",
+      "type": "relay",
+      "coordinates": {
+        "x": 108.0,
+        "y": 317.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N26",
+      "type": "relay",
+      "coordinates": {
+        "x": 50.0,
+        "y": 269.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N27",
+      "type": "relay",
+      "coordinates": {
+        "x": 124.0,
+        "y": 224.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N28",
+      "type": "relay",
+      "coordinates": {
+        "x": 204.0,
+        "y": 441.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N29",
+      "type": "relay",
+      "coordinates": {
+        "x": 207.0,
+        "y": 368.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N30",
+      "type": "relay",
+      "coordinates": {
+        "x": 188.0,
+        "y": 348.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N31",
+      "type": "relay",
+      "coordinates": {
+        "x": 225.0,
+        "y": 531.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N32",
+      "type": "relay",
+      "coordinates": {
+        "x": 234.0,
+        "y": 480.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N33",
+      "type": "relay",
+      "coordinates": {
+        "x": 160.0,
+        "y": 282.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N34",
+      "type": "relay",
+      "coordinates": {
+        "x": 60.0,
+        "y": 550.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N35",
+      "type": "relay",
+      "coordinates": {
+        "x": 129.0,
+        "y": 85.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N36",
+      "type": "relay",
+      "coordinates": {
+        "x": 161.0,
+        "y": 528.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N37",
+      "type": "relay",
+      "coordinates": {
+        "x": 296.0,
+        "y": 427.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N38",
+      "type": "relay",
+      "coordinates": {
+        "x": 105.0,
+        "y": 355.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N39",
+      "type": "relay",
+      "coordinates": {
+        "x": 268.0,
+        "y": 485.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N40",
+      "type": "relay",
+      "coordinates": {
+        "x": 107.0,
+        "y": 533.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N41",
+      "type": "relay",
+      "coordinates": {
+        "x": 183.0,
+        "y": 620.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N42",
+      "type": "relay",
+      "coordinates": {
+        "x": 286.0,
+        "y": 295.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N43",
+      "type": "relay",
+      "coordinates": {
+        "x": 256.0,
+        "y": 612.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N44",
+      "type": "relay",
+      "coordinates": {
+        "x": 23.0,
+        "y": 607.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N45",
+      "type": "relay",
+      "coordinates": {
+        "x": 287.0,
+        "y": 131.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N46",
+      "type": "relay",
+      "coordinates": {
+        "x": 293.0,
+        "y": 450.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N47",
+      "type": "relay",
+      "coordinates": {
+        "x": 241.0,
+        "y": 238.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N48",
+      "type": "relay",
+      "coordinates": {
+        "x": 53.0,
+        "y": 296.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N49",
+      "type": "relay",
+      "coordinates": {
+        "x": 82.0,
+        "y": 238.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N50",
+      "type": "relay",
+      "coordinates": {
+        "x": 156.0,
+        "y": 492.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N51",
+      "type": "relay",
+      "coordinates": {
+        "x": 36.0,
+        "y": 365.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N52",
+      "type": "relay",
+      "coordinates": {
+        "x": 63.0,
+        "y": 459.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N53",
+      "type": "relay",
+      "coordinates": {
+        "x": 190.0,
+        "y": 555.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N54",
+      "type": "relay",
+      "coordinates": {
+        "x": 293.0,
+        "y": 397.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N55",
+      "type": "relay",
+      "coordinates": {
+        "x": 34.0,
+        "y": 518.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N56",
+      "type": "relay",
+      "coordinates": {
+        "x": 21.0,
+        "y": 544.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N57",
+      "type": "relay",
+      "coordinates": {
+        "x": 18.0,
+        "y": 163.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N58",
+      "type": "relay",
+      "coordinates": {
+        "x": 64.0,
+        "y": 425.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N59",
+      "type": "relay",
+      "coordinates": {
+        "x": 88.0,
+        "y": 155.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N60",
+      "type": "relay",
+      "coordinates": {
+        "x": 24.0,
+        "y": 97.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N61",
+      "type": "relay",
+      "coordinates": {
+        "x": 85.0,
+        "y": 294.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N62",
+      "type": "relay",
+      "coordinates": {
+        "x": 130.0,
+        "y": 704.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N63",
+      "type": "relay",
+      "coordinates": {
+        "x": 175.0,
+        "y": 232.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N64",
+      "type": "relay",
+      "coordinates": {
+        "x": 53.0,
+        "y": 649.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    },
+    {
+      "id": "N65",
+      "type": "relay",
+      "coordinates": {
+        "x": 295.0,
+        "y": 601.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
+    }
+  ],
+  "links": [
+    {
+      "id": "L1_N1_N31",
+      "source": "N1",
+      "target": "N31",
+      "tranmission_rate": 94.95856036328684,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L2_N3_N30",
+      "source": "N3",
+      "target": "N30",
+      "tranmission_rate": 96.6304458514079,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L3_N5_N51",
+      "source": "N5",
+      "target": "N51",
+      "tranmission_rate": 92.28375621853786,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L4_N5_N25",
+      "source": "N5",
+      "target": "N25",
+      "tranmission_rate": 58.1436407835518,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L5_N8_N35",
+      "source": "N8",
+      "target": "N35",
+      "tranmission_rate": 74.16681955795889,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L6_N8_N45",
+      "source": "N8",
+      "target": "N45",
+      "tranmission_rate": 74.50646470184513,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L7_N9_N30",
+      "source": "N9",
+      "target": "N30",
+      "tranmission_rate": 95.1206330012426,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L8_N10_N30",
+      "source": "N10",
+      "target": "N30",
+      "tranmission_rate": 94.88652235912735,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L9_N10_N42",
+      "source": "N10",
+      "target": "N42",
+      "tranmission_rate": 71.38811304011,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L10_N10_N2",
+      "source": "N10",
+      "target": "N2",
+      "tranmission_rate": 87.23199520108024,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L11_N13_N23",
+      "source": "N13",
+      "target": "N23",
+      "tranmission_rate": 80.19592873055723,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L12_N13_N62",
+      "source": "N13",
+      "target": "N62",
+      "tranmission_rate": 54.680627443308296,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L13_N14_N22",
+      "source": "N14",
+      "target": "N22",
+      "tranmission_rate": 91.75710102040705,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L14_N14_N1",
+      "source": "N14",
+      "target": "N1",
+      "tranmission_rate": 61.83106971629277,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L15_N15_N59",
+      "source": "N15",
+      "target": "N59",
+      "tranmission_rate": 73.15763466802088,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L16_N16_N7",
+      "source": "N16",
+      "target": "N7",
+      "tranmission_rate": 74.65239034809932,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L17_N17_N19",
+      "source": "N17",
+      "target": "N19",
+      "tranmission_rate": 53.472124470747005,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L18_N17_N6",
+      "source": "N17",
+      "target": "N6",
+      "tranmission_rate": 78.59468404268453,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L19_N18_N64",
+      "source": "N18",
+      "target": "N64",
+      "tranmission_rate": 67.54895409824262,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L20_N18_N44",
+      "source": "N18",
+      "target": "N44",
+      "tranmission_rate": 66.32815039844225,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L21_N19_N45",
+      "source": "N19",
+      "target": "N45",
+      "tranmission_rate": 61.77215724160598,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L22_N21_N58",
+      "source": "N21",
+      "target": "N58",
+      "tranmission_rate": 83.20542438478563,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L23_N21_N9",
+      "source": "N21",
+      "target": "N9",
+      "tranmission_rate": 60.98008752496757,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L24_N22_N41",
+      "source": "N22",
+      "target": "N41",
+      "tranmission_rate": 62.03009661242717,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L25_N24_N51",
+      "source": "N24",
+      "target": "N51",
+      "tranmission_rate": 61.58713222403631,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L26_N24_N48",
+      "source": "N24",
+      "target": "N48",
+      "tranmission_rate": 73.44834519097905,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L27_N24_N26",
+      "source": "N24",
+      "target": "N26",
+      "tranmission_rate": 96.98146925034038,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L28_N25_N61",
+      "source": "N25",
+      "target": "N61",
+      "tranmission_rate": 75.06606756269217,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L29_N26_N15",
+      "source": "N26",
+      "target": "N15",
+      "tranmission_rate": 50.492494191378,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L30_N27_N49",
+      "source": "N27",
+      "target": "N49",
+      "tranmission_rate": 92.02577318674327,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L31_N27_N17",
+      "source": "N27",
+      "target": "N17",
+      "tranmission_rate": 88.54636396502286,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L32_N28_N32",
+      "source": "N28",
+      "target": "N32",
+      "tranmission_rate": 63.43347926142097,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L33_N28_N30",
+      "source": "N28",
+      "target": "N30",
+      "tranmission_rate": 66.96441174350954,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L34_N28_N29",
+      "source": "N28",
+      "target": "N29",
+      "tranmission_rate": 70.04162042982759,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L35_N28_N31",
+      "source": "N28",
+      "target": "N31",
+      "tranmission_rate": 98.56708376642729,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L36_N29_N30",
+      "source": "N29",
+      "target": "N30",
+      "tranmission_rate": 79.37900353395887,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L37_N31_N32",
+      "source": "N31",
+      "target": "N32",
+      "tranmission_rate": 92.29510269766169,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L38_N33_N9",
+      "source": "N33",
+      "target": "N9",
+      "tranmission_rate": 58.28118470324108,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L39_N33_N10",
+      "source": "N33",
+      "target": "N10",
+      "tranmission_rate": 72.17713486285939,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L40_N33_N38",
+      "source": "N33",
+      "target": "N38",
+      "tranmission_rate": 69.02991908388775,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L41_N33_N30",
+      "source": "N33",
+      "target": "N30",
+      "tranmission_rate": 76.39829966862598,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L42_N34_N55",
+      "source": "N34",
+      "target": "N55",
+      "tranmission_rate": 85.38492435414429,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L43_N34_N64",
+      "source": "N34",
+      "target": "N64",
+      "tranmission_rate": 99.5361156389003,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L44_N35_N12",
+      "source": "N35",
+      "target": "N12",
+      "tranmission_rate": 61.91626735486905,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L45_N35_N11",
+      "source": "N35",
+      "target": "N11",
+      "tranmission_rate": 98.48822901977343,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L46_N36_N50",
+      "source": "N36",
+      "target": "N50",
+      "tranmission_rate": 54.49824156222123,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L47_N37_N54",
+      "source": "N37",
+      "target": "N54",
+      "tranmission_rate": 91.12208837572473,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L48_N37_N46",
+      "source": "N37",
+      "target": "N46",
+      "tranmission_rate": 68.47942301553181,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L49_N38_N25",
+      "source": "N38",
+      "target": "N25",
+      "tranmission_rate": 64.8015381061203,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L50_N38_N20",
+      "source": "N38",
+      "target": "N20",
+      "tranmission_rate": 94.45271188725668,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L51_N39_N31",
+      "source": "N39",
+      "target": "N31",
+      "tranmission_rate": 65.3440229406748,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L52_N39_N2",
+      "source": "N39",
+      "target": "N2",
+      "tranmission_rate": 79.57888500778645,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L53_N40_N7",
+      "source": "N40",
+      "target": "N7",
+      "tranmission_rate": 73.33789577954029,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L54_N40_N50",
+      "source": "N40",
+      "target": "N50",
+      "tranmission_rate": 94.2092158035025,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L55_N41_N23",
+      "source": "N41",
+      "target": "N23",
+      "tranmission_rate": 95.93384142303063,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L56_N42_N45",
+      "source": "N42",
+      "target": "N45",
+      "tranmission_rate": 61.54771650657575,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L57_N43_N1",
+      "source": "N43",
+      "target": "N1",
+      "tranmission_rate": 91.77310618768047,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L58_N43_N13",
+      "source": "N43",
+      "target": "N13",
+      "tranmission_rate": 52.17266323267278,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L59_N44_N56",
+      "source": "N44",
+      "target": "N56",
+      "tranmission_rate": 65.19542683132768,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L60_N45_N35",
+      "source": "N45",
+      "target": "N35",
+      "tranmission_rate": 60.783843506682295,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L61_N47_N42",
+      "source": "N47",
+      "target": "N42",
+      "tranmission_rate": 84.70570287136631,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L62_N47_N45",
+      "source": "N47",
+      "target": "N45",
+      "tranmission_rate": 87.6568664037528,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L63_N48_N61",
+      "source": "N48",
+      "target": "N61",
+      "tranmission_rate": 64.30257094241166,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L64_N49_N4",
+      "source": "N49",
+      "target": "N4",
+      "tranmission_rate": 96.13956649682483,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L65_N49_N26",
+      "source": "N49",
+      "target": "N26",
+      "tranmission_rate": 89.18567398609535,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L66_N52_N3",
+      "source": "N52",
+      "target": "N3",
+      "tranmission_rate": 91.84873904495134,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L67_N52_N30",
+      "source": "N52",
+      "target": "N30",
+      "tranmission_rate": 94.51734438834205,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L68_N53_N28",
+      "source": "N53",
+      "target": "N28",
+      "tranmission_rate": 71.04232591103624,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L69_N53_N22",
+      "source": "N53",
+      "target": "N22",
+      "tranmission_rate": 75.15080216195855,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L70_N53_N36",
+      "source": "N53",
+      "target": "N36",
+      "tranmission_rate": 85.85622326204319,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L71_N54_N2",
+      "source": "N54",
+      "target": "N2",
+      "tranmission_rate": 53.29513733188628,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L72_N55_N52",
+      "source": "N55",
+      "target": "N52",
+      "tranmission_rate": 54.57924180507597,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L73_N55_N56",
+      "source": "N55",
+      "target": "N56",
+      "tranmission_rate": 69.97393884845016,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L74_N55_N51",
+      "source": "N55",
+      "target": "N51",
+      "tranmission_rate": 76.27613983055907,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L75_N58_N30",
+      "source": "N58",
+      "target": "N30",
+      "tranmission_rate": 60.84613450332911,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L76_N58_N20",
+      "source": "N58",
+      "target": "N20",
+      "tranmission_rate": 69.22965327665241,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L77_N59_N45",
+      "source": "N59",
+      "target": "N45",
+      "tranmission_rate": 75.31629923862154,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L78_N59_N4",
+      "source": "N59",
+      "target": "N4",
+      "tranmission_rate": 73.18516003029835,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L79_N59_N57",
+      "source": "N59",
+      "target": "N57",
+      "tranmission_rate": 50.4881841444885,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L80_N60_N57",
+      "source": "N60",
+      "target": "N57",
+      "tranmission_rate": 55.25143664045073,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L81_N60_N12",
+      "source": "N60",
+      "target": "N12",
+      "tranmission_rate": 65.93076010333374,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L82_N62_N16",
+      "source": "N62",
+      "target": "N16",
+      "tranmission_rate": 99.9924723104082,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L83_N63_N25",
+      "source": "N63",
+      "target": "N25",
+      "tranmission_rate": 71.88211156654059,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L84_N63_N27",
+      "source": "N63",
+      "target": "N27",
+      "tranmission_rate": 91.33621979713483,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L85_N63_N33",
+      "source": "N63",
+      "target": "N33",
+      "tranmission_rate": 88.113618918789,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L86_N63_N6",
+      "source": "N63",
+      "target": "N6",
+      "tranmission_rate": 71.73997233337094,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L87_N65_N46",
+      "source": "N65",
+      "target": "N46",
+      "tranmission_rate": 91.4207374063399,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L88_N65_N43",
+      "source": "N65",
+      "target": "N43",
+      "tranmission_rate": 60.779576100139096,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L89_N3_N28",
+      "source": "N3",
+      "target": "N28",
+      "tranmission_rate": 60.17117346213914,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L90_N10_N28",
+      "source": "N10",
+      "target": "N28",
+      "tranmission_rate": 90.91420215936526,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L91_N10_N47",
+      "source": "N10",
+      "target": "N47",
+      "tranmission_rate": 88.07867685618831,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L92_N31_N14",
+      "source": "N31",
+      "target": "N14",
+      "tranmission_rate": 94.98616194872496,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L93_N14_N41",
+      "source": "N14",
+      "target": "N41",
+      "tranmission_rate": 66.06994533346119,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L94_N16_N13",
+      "source": "N16",
+      "target": "N13",
+      "tranmission_rate": 94.78945513984146,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L95_N24_N15",
+      "source": "N24",
+      "target": "N15",
+      "tranmission_rate": 81.17315223461881,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L96_N39_N28",
+      "source": "N39",
+      "target": "N28",
+      "tranmission_rate": 82.63044703782222,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L97_N39_N46",
+      "source": "N39",
+      "target": "N46",
+      "tranmission_rate": 99.90497023877167,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L98_N40_N13",
+      "source": "N40",
+      "target": "N13",
+      "tranmission_rate": 81.21448708052894,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L99_N40_N16",
+      "source": "N40",
+      "target": "N16",
+      "tranmission_rate": 62.14906692707788,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L100_N40_N30",
+      "source": "N40",
+      "target": "N30",
+      "tranmission_rate": 86.93161921630498,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L101_N46_N28",
+      "source": "N46",
+      "target": "N28",
+      "tranmission_rate": 71.80210497261129,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L102_N55_N24",
+      "source": "N55",
+      "target": "N24",
+      "tranmission_rate": 59.622210937223656,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L103_N55_N28",
+      "source": "N55",
+      "target": "N28",
+      "tranmission_rate": 50.12399844955053,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L104_N59_N35",
+      "source": "N59",
+      "target": "N35",
+      "tranmission_rate": 92.86541625083797,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L105_N59_N60",
+      "source": "N59",
+      "target": "N60",
+      "tranmission_rate": 79.63657822819603,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L106_N63_N30",
+      "source": "N63",
+      "target": "N30",
+      "tranmission_rate": 56.056747028948564,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L107_N63_N59",
+      "source": "N63",
+      "target": "N59",
+      "tranmission_rate": 50.20290902223344,
+      "energy_coef": 0.2
+    },
+    {
+      "id": "L108_N65_N13",
+      "source": "N65",
+      "target": "N13",
+      "tranmission_rate": 85.97997826339999,
+      "energy_coef": 0.2
+    }
+  ]
+}

@@ -1,26 +1,18 @@
 from typing import TypedDict, Dict, Any
-
-class TimeConfig(TypedDict):
-    slot_duration: float  
-    slots_per_frame: int  
-    max_steps: int        # slot of 1 episode
+from src.utils import cfg
 
 class TimeManager:
-    def __init__(self, config: TimeConfig):
+    def __init__(self, neuron_cfg=cfg.neuron_net):
         """
         Quản lý thời gian cho mô hình HMDP (Hierarchical Markov Decision Process).
-        
-        Args:
-            config (TimeConfig): Dictionary chứa cấu hình thời gian.
         """
-        # Validate input
-        if config['slots_per_frame'] <= 0:
+        if neuron_cfg['TIME_SLOT_PER_TIMEFRAME'] <= 0:
             raise ValueError("slots_per_frame must be > 0")
             
         # Constants
-        self.slot_duration: float = float(config['slot_duration'])
-        self.slots_per_frame: int = int(config['slots_per_frame'])
-        self.max_steps: int = int(config['max_steps'])
+        self.slot_duration: float = float(neuron_cfg['SLOT_DURATION'])
+        self.slots_per_frame: int = int(neuron_cfg['TIME_SLOT_PER_TIMEFRAME'])
+        self.max_steps: int = int(neuron_cfg['TIME_STEP_OFEP'])
         
         # State variables
         self.current_slot: int = 0
@@ -62,6 +54,9 @@ class TimeManager:
             order of the slot in the frame
         """
         return self.current_slot % self.slots_per_frame
+
+    def to_abs_time(self, timeslot: int):
+        return self.slot_duration*timeslot
 
     def get_state(self) -> Dict[str, Any]:
         """Trả về snapshot trạng thái dạng dict để log hoặc observe."""

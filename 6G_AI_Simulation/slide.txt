@@ -1,0 +1,11 @@
+Để trả lời cho câu hỏi này, chúng ta không thể chỉ dựa vào một trung tâm xử lý duy nhất. Thay vào đó, các hệ thống truyền thông hiện đại ngày nay được xây dựng trên một khung xương vững chắc hơn, đó chính là Kiến trúc phân tầng E-N-C: Edge - Network - Cloud."
+
+Tầng Edge (Biên): Thay vì gửi mọi thứ lên Cloud, chúng ta xử lý ngay tại 'hiện trường'. Các thiết bị Edge sẽ lọc dữ liệu thô, thực hiện các phân tích cơ bản và phản hồi thời gian thực ngay lập tức.
+
+Tầng Network (Mạng): Đóng vai trò là huyết mạch, kết nối linh hoạt thông qua 5G hoặc Wi-Fi để đảm bảo dữ liệu được luân chuyển an toàn và tối ưu.
+
+Tầng Cloud (Đám mây): Đây là 'bộ não trung tâm', nơi lưu trữ dữ liệu dài hạn và huấn luyện các mô hình AI phức tạp mà tầng biên không đủ sức mạnh để thực hiện."
+
+
+
+Sau khi đã xác định được khung kiến trúc phân tầng Edge-Network-Cloud, câu hỏi quan trọng tiếp theo là: Làm thế nào để vận hành bộ máy này một cách thông minh nhất?"

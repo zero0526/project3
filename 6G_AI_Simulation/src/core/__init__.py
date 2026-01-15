@@ -1,5 +1,6 @@
-from .environment import HMFD3QNEnv
-
+from .environment import SixGEnvironment
+from .workload_generator import WorkloadGenerator
 __all__=[
-    "HMFD3QNEnv"
+    "SixGEnvironment",
+    "WorkloadGenerator"
 ]

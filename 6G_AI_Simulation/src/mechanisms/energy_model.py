@@ -1,20 +1,5 @@
 
-class EnergyModel:
-    @staticmethod
-    def calc_transmission(p_trans, data_size_mb, bandwidth_mbps, hops):
-        """
-        Tính năng lượng truyền dẫn (Eq. 11).
-        E_tr = Power * Time * Hops
-        """
-        if bandwidth_mbps <= 0: return float('inf')
-        
-        # Đổi MB -> Mb
-        data_size_mbits = data_size_mb * 8
-        trans_time = data_size_mbits / bandwidth_mbps
-        
-        # E = P * t * hops
-        return p_trans * trans_time * hops
-
+class NodeModel:
     @staticmethod
     def calc_computation(coeff, frequency, duration, omega, cold_start_energy):
         """

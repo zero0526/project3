@@ -1,20 +1,41 @@
 simulation:
   seed: 42
-  device: "cpu" 
-
-  time:
-    slot_duration: 0.1       # second
-    slots_per_frame: 10      
-    total_episodes: 200     
-    max_steps: 100          
+  device: "cpu"     
 
   paths:
-    topology_xml: "configs/topologies/atlanta.xml"        # File src SNDLib
-    topology_json: "configs/topologies/atlanta_processed.json" 
+    topology_atlanta_xml: "configs/topologies/atlanta.xml"        # File src SNDLib
+    topology_atlanta_json: "configs/topologies/atlanta_processed.json" 
+    topology_ta2_xml: "configs/topologies/ta2.xml"        # File src SNDLib
+    topology_ta2_json: "configs/topologies/ta2_processed.json" 
     logs: "data/logs/"
     checkpoints: "data/checkpoints/"
     results: "data/results/"
 
-  workload:
-    arrival_rate: 30
+  task:
+    arrival_rate: 1.0
     zipf_param: 0.8
+    default_batch_size: 20
+
+
+  NEURON_NET:
+    BATCH_SIZE: 64
+    LR_Q: 0.0001
+    LR_MF: 0.0001
+    GAMMA: 0.99 
+    TAU: 0.001 
+    MEMORY_SIZE: 300000
+    BUFFER_MIN_SIZE: 1000 
+    ANNEALING_LENGTH: 1500
+    NUMOF_TEST_EP: 10
+    NUMOF_TRAIN_EP: 3000
+    TIME_STEP_OFEP: 100
+    TIME_SLOT_PER_TIMEFRAME: 10
+    SLOT_DURATION: 5
+
+    NUM_LOWER_AGENTS: 20
+    OMEGA_Q1: 1000
+    OMEGA_Q2: 0.12
+
+    HIDDEN_MF: 50
+    HIDDEN_Q1: 128
+    HIDDEN_Q2: 64

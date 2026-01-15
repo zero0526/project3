@@ -1,35 +1,54 @@
 nodes:
   cloud:
     type: "cloud"
-    cpu: 5600         # GFLOPS 
-    ram: 80           # GB 
-    hdd: 500          # GB 
-    energy_coeff: 5.0e-10  # 5 * 10^-10 (Table II)
-    
+    cpu_min: 5600 # GFLOPS
+    cpu_max: 5600
+    ram: 80 # GB
+    hdd: 80
+
   edge:
     type: "edge"
-    cpu: 3500         # GFLOPS 
-    ram: 20           # GB 
-    hdd: 10           # GB 
-    energy_coeff: 5.0e-10  
-    
+    cpu_min: 3000 # GFLOPS
+    cpu_max: 4000
+    ram: 20 # GB
+    hdd: 10
+
   network:
     type: "network"
-    cpu: 1000         # GFLOPS (avg[800, 1200])
-    ram: 10           # GB
-    hdd: 10           # GB
-    energy_coeff: 5.0e-10
+    cpu_min: 800 # GFLOPS
+    cpu_max: 1200
+    ram: 10 # GB
+    hdd: 10 # GB
+  relay:
+    type: "relay"
+    cpu_min: 0
+    cpu_max: 0
+    ram: 0
+    hdd: 0
 
 links:
-  # paper: 50-100 MB/s -> 400-800 Mbps
-  default_bandwidth: 600    # Mbps (600 Mbps = 75 MB/s)
-  propagation_delay: 0.005  # 5ms 
-  
-  # (Table II: 0.2W)
-  transmission_power: 0.2   # Watts ( E_tr)
+  tranmission_rate_min: 50 # mb/s
+  tranmission_rate_max: 100
 
-# Cấu hình Cold Start (Table II)
-cold_start:
-  energy: 0.2        # Watts (epsilon_cold)
-  latency_min: 0.15  # Seconds
-  latency_max: 0.85  # Seconds
+energy:
+  computation_coef: 5e-10 # w
+  cold_start: 0.2
+  tranmission_coef: 0.2
+
+lypa_coef: 1e-7
+cold_start_time:
+  min: 0.15 #s
+  max: 0.85
+avg_req: 20 #per slot
+
+coordinate:
+  atlanta:
+    cloud: ["N15"]
+    edge: ["N4", "N5", "N11", "N12", "N13"]
+    network: ["N10", "N8"]
+    relay: []
+  ta2:
+    cloud: ["N65"]
+    edge: ["N7", "N15", "N18", "N42", "N62"]
+    network: ["N1", "N13"]
+    relay: []

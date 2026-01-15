@@ -1,9 +1,8 @@
-from .lower_agent import LowerAgent
-from .upper_agent import UpperAgent
-from .networks import UpperAgent, MeanFieldNet
+from .base_agent import MFD3QNAgent, MeanFieldNet
+from .train import HMFD3QN_Trainer
 
-__all__=[
-    "LowerAgent",
-    "UpperAgent",
-    "MeanFieldNet"
+__all__ = [
+    "MFD3QNAgent",
+    "MeanFieldNet",
+    "HMFD3QN_Trainer"
 ]

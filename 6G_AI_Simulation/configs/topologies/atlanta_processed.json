@@ -1,186 +1,390 @@
 {
+  "network_name": "atlanta",
+  "created_at": "Simulation Pre-processing",
+  "stats": {
+    "total_nodes": 15,
+    "total_links": 22,
+    "node_types": {
+      "relay": 7,
+      "edge": 5,
+      "network": 2,
+      "cloud": 1
+    }
+  },
+  "global_config": {
+    "energy": {
+      "computation_coef": "5e-10",
+      "cold_start": 0.2,
+      "tranmission_coef": 0.2
+    },
+    "links_capacity": {
+      "min": 50,
+      "max": 100
+    },
+    "cold_start_time": {
+      "min": 0.15,
+      "max": 0.85
+    }
+  },
   "nodes": [
     {
       "id": "N1",
-      "type": "cloud",
-      "cpu": 5600,
-      "ram": 80,
-      "hdd": 500,
-      "energy_coeff": 5e-10
+      "type": "relay",
+      "coordinates": {
+        "x": 283.0,
+        "y": 248.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
     },
     {
       "id": "N2",
-      "type": "edge",
-      "cpu": 3500,
-      "ram": 20,
-      "hdd": 10,
-      "energy_coeff": 5e-10
+      "type": "relay",
+      "coordinates": {
+        "x": 451.0,
+        "y": 201.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
     },
     {
       "id": "N3",
-      "type": "relay"
+      "type": "relay",
+      "coordinates": {
+        "x": 516.0,
+        "y": 230.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
     },
     {
       "id": "N4",
       "type": "edge",
-      "cpu": 3500,
+      "coordinates": {
+        "x": 324.0,
+        "y": 43.0
+      },
+      "cpu": 3823.07,
+      "cpu_max": 4000,
       "ram": 20,
       "hdd": 10,
-      "energy_coeff": 5e-10
+      "energy_coef": "5e-10",
+      "is_computing": true
     },
     {
       "id": "N5",
-      "type": "relay"
+      "type": "edge",
+      "coordinates": {
+        "x": 459.0,
+        "y": 31.0
+      },
+      "cpu": 3802.25,
+      "cpu_max": 4000,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
     },
     {
       "id": "N6",
-      "type": "network",
-      "cpu": 1000,
-      "ram": 10,
-      "hdd": 10,
-      "energy_coeff": 5e-10
+      "type": "relay",
+      "coordinates": {
+        "x": 339.0,
+        "y": 151.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
     },
     {
       "id": "N7",
-      "type": "edge",
-      "cpu": 3500,
-      "ram": 20,
-      "hdd": 10,
-      "energy_coeff": 5e-10
+      "type": "relay",
+      "coordinates": {
+        "x": 185.0,
+        "y": 323.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
     },
     {
       "id": "N8",
-      "type": "relay"
+      "type": "network",
+      "coordinates": {
+        "x": 384.0,
+        "y": 298.0
+      },
+      "cpu": 1118.52,
+      "cpu_max": 1200,
+      "ram": 10,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
     },
     {
       "id": "N9",
-      "type": "edge",
-      "cpu": 3500,
-      "ram": 20,
-      "hdd": 10,
-      "energy_coeff": 5e-10
+      "type": "relay",
+      "coordinates": {
+        "x": 318.0,
+        "y": 353.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
     },
     {
       "id": "N10",
-      "type": "relay"
+      "type": "network",
+      "coordinates": {
+        "x": 147.0,
+        "y": 403.0
+      },
+      "cpu": 948.1,
+      "cpu_max": 1200,
+      "ram": 10,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
     },
     {
       "id": "N11",
-      "type": "network",
-      "cpu": 1000,
-      "ram": 10,
+      "type": "edge",
+      "coordinates": {
+        "x": 56.0,
+        "y": 132.0
+      },
+      "cpu": 3398.55,
+      "cpu_max": 4000,
+      "ram": 20,
       "hdd": 10,
-      "energy_coeff": 5e-10
+      "energy_coef": "5e-10",
+      "is_computing": true
     },
     {
       "id": "N12",
       "type": "edge",
-      "cpu": 3500,
+      "coordinates": {
+        "x": 253.0,
+        "y": 466.0
+      },
+      "cpu": 3795.05,
+      "cpu_max": 4000,
       "ram": 20,
       "hdd": 10,
-      "energy_coeff": 5e-10
+      "energy_coef": "5e-10",
+      "is_computing": true
     },
     {
       "id": "N13",
-      "type": "relay"
+      "type": "edge",
+      "coordinates": {
+        "x": 216.0,
+        "y": 59.0
+      },
+      "cpu": 3315.34,
+      "cpu_max": 4000,
+      "ram": 20,
+      "hdd": 10,
+      "energy_coef": "5e-10",
+      "is_computing": true
     },
     {
       "id": "N14",
-      "type": "relay"
+      "type": "relay",
+      "coordinates": {
+        "x": 97.0,
+        "y": 218.0
+      },
+      "cpu": 0.0,
+      "ram": 0.0,
+      "hdd": 0.0,
+      "energy_coef": 0.0,
+      "is_computing": false
     },
     {
       "id": "N15",
-      "type": "relay"
+      "type": "cloud",
+      "coordinates": {
+        "x": 463.0,
+        "y": 431.0
+      },
+      "cpu": 5600.0,
+      "cpu_max": 5600,
+      "ram": 80,
+      "hdd": 80,
+      "energy_coef": "5e-10",
+      "is_computing": true
     }
   ],
   "links": [
     {
+      "id": "L1",
       "source": "N1",
-      "target": "N6"
+      "target": "N6",
+      "tranmission_rate": 69.98557278250277,
+      "energy_coef": 0.2
     },
     {
+      "id": "L2",
       "source": "N1",
-      "target": "N7"
+      "target": "N7",
+      "tranmission_rate": 78.9124980344671,
+      "energy_coef": 0.2
     },
     {
+      "id": "L3",
       "source": "N1",
-      "target": "N8"
+      "target": "N8",
+      "tranmission_rate": 56.154626419078646,
+      "energy_coef": 0.2
     },
     {
+      "id": "L4",
       "source": "N2",
-      "target": "N3"
+      "target": "N3",
+      "tranmission_rate": 92.82246029524882,
+      "energy_coef": 0.2
     },
     {
+      "id": "L5",
       "source": "N2",
-      "target": "N5"
+      "target": "N5",
+      "tranmission_rate": 68.61019944528888,
+      "energy_coef": 0.2
     },
     {
+      "id": "L6",
       "source": "N2",
-      "target": "N6"
+      "target": "N6",
+      "tranmission_rate": 88.31851424515725,
+      "energy_coef": 0.2
     },
     {
+      "id": "L7",
       "source": "N3",
-      "target": "N5"
+      "target": "N5",
+      "tranmission_rate": 98.91391631755116,
+      "energy_coef": 0.2
     },
     {
+      "id": "L8",
       "source": "N3",
-      "target": "N8"
+      "target": "N8",
+      "tranmission_rate": 90.93204409191381,
+      "energy_coef": 0.2
     },
     {
+      "id": "L9",
       "source": "N4",
-      "target": "N5"
+      "target": "N5",
+      "tranmission_rate": 70.51415289673747,
+      "energy_coef": 0.2
     },
     {
+      "id": "L10",
       "source": "N4",
-      "target": "N6"
+      "target": "N6",
+      "tranmission_rate": 85.19918342983891,
+      "energy_coef": 0.2
     },
     {
+      "id": "L11",
       "source": "N6",
-      "target": "N13"
+      "target": "N13",
+      "tranmission_rate": 61.25541146368606,
+      "energy_coef": 0.2
     },
     {
+      "id": "L12",
       "source": "N7",
-      "target": "N10"
+      "target": "N10",
+      "tranmission_rate": 95.7669762618105,
+      "energy_coef": 0.2
     },
     {
+      "id": "L13",
       "source": "N7",
-      "target": "N14"
+      "target": "N14",
+      "tranmission_rate": 79.92907433989907,
+      "energy_coef": 0.2
     },
     {
+      "id": "L14",
       "source": "N8",
-      "target": "N9"
+      "target": "N9",
+      "tranmission_rate": 58.645224044772846,
+      "energy_coef": 0.2
     },
     {
+      "id": "L15",
       "source": "N8",
-      "target": "N15"
+      "target": "N15",
+      "tranmission_rate": 70.44227161745592,
+      "energy_coef": 0.2
     },
     {
+      "id": "L16",
       "source": "N9",
-      "target": "N10"
+      "target": "N10",
+      "tranmission_rate": 98.58301677184929,
+      "energy_coef": 0.2
     },
     {
+      "id": "L17",
       "source": "N9",
-      "target": "N12"
+      "target": "N12",
+      "tranmission_rate": 69.28658113631698,
+      "energy_coef": 0.2
     },
     {
+      "id": "L18",
       "source": "N9",
-      "target": "N15"
+      "target": "N15",
+      "tranmission_rate": 56.71762844906156,
+      "energy_coef": 0.2
     },
     {
+      "id": "L19",
       "source": "N10",
-      "target": "N12"
+      "target": "N12",
+      "tranmission_rate": 61.55549312220867,
+      "energy_coef": 0.2
     },
     {
+      "id": "L20",
       "source": "N11",
-      "target": "N13"
+      "target": "N13",
+      "tranmission_rate": 89.61709841627112,
+      "energy_coef": 0.2
     },
     {
+      "id": "L21",
       "source": "N11",
-      "target": "N14"
+      "target": "N14",
+      "tranmission_rate": 57.06611981561023,
+      "energy_coef": 0.2
     },
     {
+      "id": "L22",
       "source": "N13",
-      "target": "N14"
+      "target": "N14",
+      "tranmission_rate": 52.653987659542246,
+      "energy_coef": 0.2
     }
   ]
 }
