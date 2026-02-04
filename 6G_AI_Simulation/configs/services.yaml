@@ -4,8 +4,8 @@ services:
     omega: 1        
     size: 365.2      
     input_data_size: 0.57 #mb
-    mean_deadline: 3.0  
-    std_deadline: 0.5
+    mean_deadline: 1.5  
+    std_deadline: 0.3
     models:
       - id: 0
         name: "ConvNeXt_Tiny"
@@ -29,7 +29,7 @@ services:
     omega: 1
     size: 114.6
     input_data_size: 19.66 # MB wav
-    mean_deadline: 15.0
+    mean_deadline: 10.0
     std_deadline: 2.0
     models:
       - id: 0
@@ -50,8 +50,8 @@ services:
     omega: 1
     size: 114
     input_data_size: 3.0 # MB (Text light)
-    mean_deadline: 6.0
-    std_deadline: 1.0
+    mean_deadline: 4.0
+    std_deadline: 0.8
     models:
       - id: 0
         name: "DeepLabV3_MobileNet_V3"
@@ -71,8 +71,8 @@ services:
     omega: 0
     size: 90.8
     input_data_size: 7.81 # MB 
-    mean_deadline: 10.0
-    std_deadline: 1.5
+    mean_deadline: 7.5
+    std_deadline: 1.2
     models:
       - id: 0
         name: "MaskRCNN_ResNet50_FPN_V2"
@@ -88,7 +88,7 @@ services:
     omega: 0         # Occasional -> HDD
     size: 72.2        # MB 
     input_data_size: 7.81
-    mean_deadline: 10.0    
+    mean_deadline: 8.5
     std_deadline: 1.5
     models:
       - id: 0

@@ -9,7 +9,7 @@ class Terminal:
         terminal_id: str, 
         edge_id: str, 
         arrival_rate: float = 1.0, 
-        default_batch_size: int = 20
+        default_batch_size: int = 10
     ):
         """
         Đại diện cho một Terminal (Agent cấp thấp).
@@ -52,9 +52,9 @@ class Terminal:
             zipf_probs: Mảng xác suất Zipf đã tính sẵn (từ Generator).
             service_config_list: Danh sách cấu hình toàn bộ dịch vụ (từ Generator).
         """
-        if np.random.random() > arrival_rate:
-            self.current_task = None
-            return None
+        # if np.random.random() > arrival_rate:
+        #     self.current_task = None
+        #     return None
 
         # 2. Chọn 1 Service duy nhất dựa trên phân phối Zipf
         num_services = len(service_config_list)

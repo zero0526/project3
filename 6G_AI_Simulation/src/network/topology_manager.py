@@ -77,3 +77,60 @@ class TopologyManager:
         Lấy ra danh sách các node có type là 'edge'
         """
         return [node_id for node_id, data in self.graph.nodes(data=True) if data.get('type') == node_type]
+
+    def get_average_hops_to_node(self, target_node_id: str) -> float:
+        """
+        Ước tính số hop trung bình từ các node nguồn (edge/cloud khác) đến target_node_id.
+        Xác suất gửi tin từ node nguồn giảm dần theo khoảng cách hop.
+        """
+        # Node nguồn tiềm năng: Edge hoặc Cloud nodes (trừ chính nó)
+        source_node_ids = [nid for nid, d in self.graph.nodes(data=True) 
+                          if d.get('type') in ['edge', 'cloud'] and nid != target_node_id]
+        
+        if not source_node_ids:
+            return 0.0
+
+        import networkx as nx
+        try:
+            # Tính khoảng cách từ tất cả các nút đến target_node_id
+            all_distances = nx.single_source_shortest_path_length(self.graph, target_node_id)
+        except Exception:
+            return 1.0
+
+        weighted_hops_sum = 0.0
+        total_probability_weight = 0.0
+        
+        for src_id in source_node_ids:
+            dist = all_distances.get(src_id, 20)
+            # Trọng số xác suất: tỉ lệ nghịch với dist+1
+            weight = 1.0 / (dist + 1)
+            
+            weighted_hops_sum += dist * weight
+            total_probability_weight += weight
+            
+        if total_probability_weight == 0:
+            return 1.0
+            
+        return weighted_hops_sum / total_probability_weight
+    
+    def get_edge_nodes_by_depth(self, start_node: str, max_depth: int) -> List[str]:
+        """
+        Duyệt DFS để tìm các node 'edge' trong phạm vi độ sâu max_depth.
+        """
+        edge_nodes = []
+        visited = {start_node}
+
+        def dfs(u, current_depth):
+            # Nếu không phải node xuất phát và là edge, thêm vào danh sách
+            if u != start_node and self.graph.nodes[u].get('type') == 'edge':
+                if u not in edge_nodes:
+                    edge_nodes.append(u)
+            
+            if current_depth < max_depth:
+                for v in self.graph.neighbors(u):
+                    if v not in visited:
+                        visited.add(v)
+                        dfs(v, current_depth + 1)
+
+        dfs(start_node, 0)
+        return edge_nodes

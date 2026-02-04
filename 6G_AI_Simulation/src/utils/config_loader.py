@@ -52,6 +52,7 @@ class Config:
         self.lypa_coef = float(self.network.get('lypa_coef', 1e-7))
         self.cold_start_time = self.network.get('cold_start_time', {})
         self.avg_req = self.network.get('avg_req', 20)
+        self.MAX_DEPTH= self.network.get('MAX_DEPTH',1)
         
         # Get coordinates for the selected network
         coordinates = self.network.get('coordinate', {})

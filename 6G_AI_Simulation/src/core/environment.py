@@ -15,13 +15,11 @@ class SixGEnvironment:
     def __init__(self, service_config: List[Dict]):
         """
         Môi trường mô phỏng mạng 6G tối ưu hóa AI Service Placement & Task Scheduling.
-        Dựa trên bài báo: Joint AI Service Placement, Task Scheduling, and Resource Allocation for IoT in 6G.
         """
         self.service_config = service_config
         self.num_services = len(service_config)
         self.device = cfg.device
 
-        # 1. Khởi tạo thành phần mạng
         self.topo_manager = TopologyManager()
         self.topo_manager.load_topology_from_data()
         
@@ -29,8 +27,8 @@ class SixGEnvironment:
         self.channel_model.topo = self.topo_manager 
 
         self.nodes: Dict[str, ComputingNode] = {}
-        self.agent_node_ids = []  # Các node tham gia học (Edge/Network)
-        self.cloud_node_ids = []  # Các node Cloud (Full services, không học)
+        self.agent_node_ids = []
+        self.cloud_node_ids = []
         self._init_nodes()
 
         self.terminals: Dict[str, Terminal] = {}
@@ -44,336 +42,239 @@ class SixGEnvironment:
 
         self.time_manager = TimeManager()
 
-        # 2. Thiết lập Kích thước (Dimensions) cho Agent
         self.node_id_to_idx = {nid: i for i, nid in enumerate(sorted(self.nodes.keys()))}
         self.num_nodes_total = len(self.nodes)
         self.max_models_total = max([len(svc['models']) for svc in service_config])
         
-        # Upper Agent State/Action Dims
-        self.upper_state_dim = 2 * self.num_services # [Placement_prev, Popularity]
-        self.upper_action_dim = self.num_services    # Multi-binary hoặc Discrete map
+        self.upper_state_dim = 2 * self.num_services
+        self.upper_action_dim = self.num_services
         
-        # Lower Agent State/Action Dims
-        self.lower_state_dim = 4 + (2 * self.num_nodes_total) # [Task_info(4), Node_states(2*N)]
-        self.lower_action_dim = self.num_nodes_total * self.max_models_total
+        self.lower_state_dim = 4 + (2 * self.num_nodes_total) 
+        self.lower_action_dim = self.num_nodes_total + self.max_models_total
         self.mf_lower_dim = self.num_nodes_total + self.max_models_total
 
-        # 3. Tracking & Metrics
+        self.current_episode = 0
         self.frame_F1_accumulation = 0.0
+        self.frame_violations_accumulation = 0
         self.total_completed_tasks = 0
-        self.node_request_history = defaultdict(lambda: np.zeros(self.num_services))
+        self.total_energy = 0.0          
+        self.total_violations = 0        
+        self.T = cfg.neuron_net.get('TIME_SLOT_PER_TIMEFRAME', 10)
+        self.node_request_history = defaultdict(lambda: deque(maxlen=self.T))
         self.last_terminal_actions = defaultdict(lambda: np.zeros(self.mf_lower_dim, dtype=np.float32))
+        
+        # Per-node frame accumulations for rewards
+        self.node_frame_F1_acc = defaultdict(float)
+        self.node_frame_violations_acc = defaultdict(int)
 
     def _init_nodes(self):
-        """Khởi tạo node và áp dụng logic Cloud Node."""
         for node_id, data in self.topo_manager.graph.nodes(data=True):
             if data.get('type') in ['edge', 'cloud', 'network']:
-                specs = {
-                    'cpu': data['cpu_available'],
-                    'ram': data['ram_capacity'],
-                    'hdd': data['hdd_capacity'],
-                    'energy_coeff': data['energy_coef'],
-                    'type': data['type']
-                }
-                node = ComputingNode(node_id, specs)
-                
+                avg_hops = self.topo_manager.get_average_hops_to_node(node_id)
+                node = ComputingNode(node_id, {
+                    'cpu': data['cpu_available'], 'ram': data['ram_capacity'],
+                    'hdd': data['hdd_capacity'], 'energy_coeff': data['energy_coef'], 'type': data['type']
+                }, self.service_config, avg_hops=avg_hops)
                 if data.get('type') == 'cloud':
-                    # Cloud nodes mặc định bật toàn bộ dịch vụ (Không cần agent học)
-                    full_placement = [1] * self.num_services
-                    node.update_placement(full_placement, self.service_config)
+                    node.update_placement([1]*self.num_services, self.service_config)
                     self.cloud_node_ids.append(node_id)
-                else:
-                    self.agent_node_ids.append(node_id)
-                
+                else: self.agent_node_ids.append(node_id)
                 self.nodes[node_id] = node
 
     def _init_terminals(self):
         edge_nodes = self.topo_manager.get_nodes_by_type('edge')
-        num_terminals = cfg.neuron_net['NUM_LOWER_AGENTS']
-        for i in range(num_terminals):
+        for i in range(cfg.neuron_net['NUM_LOWER_AGENTS']):
             t_id = f"UE_{i}"
-            assigned_edge = edge_nodes[i % len(edge_nodes)]
-            self.terminals[t_id] = Terminal(t_id, assigned_edge, cfg.task_param['arrival_rate'])
+            self.terminals[t_id] = Terminal(t_id, edge_nodes[i % len(edge_nodes)], cfg.task_param['arrival_rate'])
 
     def reset(self):
-        """Reset môi trường cho Episode mới."""
         self.time_manager.reset()
-        for node in self.nodes.values():
-            node.reset()
-        
-        # Re-enforce Cloud nodes placement
-        full_vec = [1] * self.num_services
-        for cid in self.cloud_node_ids:
-            self.nodes[cid].update_placement(full_vec, self.service_config)
-
+        for node in self.nodes.values(): node.reset()
+        for cid in self.cloud_node_ids: self.nodes[cid].update_placement([1]*self.num_services, self.service_config)
         self.frame_F1_accumulation = 0.0
+        self.frame_violations_accumulation = 0
         self.total_completed_tasks = 0
+        self.total_energy = 0.0
+        self.total_violations = 0
         self.node_request_history.clear()
         self.last_terminal_actions.clear()
-
+        self.node_frame_F1_acc.clear()
+        self.node_frame_violations_acc.clear()
         self.workload_gen.step(current_time_slot=0)
         return self._get_upper_obs()
 
-    # =========================================================================
-    #  UPPER LEVEL: AI Service Placement (Frame t)
-    # =========================================================================
-
-    def step_upper(self, agent_placement_actions: Dict[str, List[int]]):
-        """
-        Nhận hành động Placement từ các Upper Agents.
-        """
+    def step_upper(self, actions: Dict[str, List[int]]):
         self.frame_F1_accumulation = 0.0
-        self.node_request_history.clear() # Reset popularity cho frame mới
-
-        # Cập nhật cho Agent Nodes
-        for node_id in self.agent_node_ids:
-            if node_id in agent_placement_actions:
-                self.nodes[node_id].update_placement(agent_placement_actions[node_id], self.service_config)
+        self.frame_violations_accumulation = 0
+        for nid in self.agent_node_ids:
+            if nid in actions: self.nodes[nid].update_placement(actions[nid], self.service_config)
+        
+        # Reset accumulations at start of new frame
+        self.node_frame_F1_acc.clear()
+        self.node_frame_violations_acc.clear()
 
     def get_upper_feedback(self):
-        """Trả về tuple (Next_Obs, Next_MF, Reward) cho Upper Agents sau khi hết Frame."""
-        # Eq. 40: Reward_upper = -Sum(F1). Scale 1e-8 để ổn định training.
-        reward = -self.frame_F1_accumulation * 1e-8
-        
+        rewards = {}
+        for nid in self.agent_node_ids:
+            penalty = self.node_frame_violations_acc[nid] * 10.0
+            r = (-self.node_frame_F1_acc[nid] * 1e-11) - penalty
+            rewards[nid] = r
+            
         all_obs, all_mf = self._get_upper_obs()
-        
-        # Chỉ trả về cho các node có Agent học
-        agent_obs = {nid: all_obs[nid] for nid in self.agent_node_ids}
-        agent_mf = {nid: all_mf[nid] for nid in self.agent_node_ids}
-        
-        return agent_obs, agent_mf, reward
+        return {nid: all_obs[nid] for nid in self.agent_node_ids}, \
+               {nid: all_mf[nid] for nid in self.agent_node_ids}, rewards
 
     def _get_upper_obs(self):
-        """Eq. 34-37: State của Upper Agent."""
-        observations, mean_fields = {}, {}
-        
-        # Lấy trạng thái placement hiện tại của toàn mạng
-        all_placements = {nid: np.array([1.0 if n.placed_services.get(i, False) else 0.0 
-                          for i in range(self.num_services)]) for nid, n in self.nodes.items()}
-
-        for node_id, node in self.nodes.items():
-            # Local State: [x_v, phi_v]
-            total_reqs = max(1.0, np.sum(self.node_request_history[node_id]))
-            phi = self.node_request_history[node_id] / total_reqs
-            observations[node_id] = np.concatenate([all_placements[node_id], phi]).astype(np.float32)
-            
-            # Mean Field: Trung bình Placement của các node láng giềng vật lý
-            neighbors = [n for n in self.topo_manager.graph.neighbors(node_id) if n in self.nodes]
-            if neighbors:
-                mean_fields[node_id] = np.mean([all_placements[n] for n in neighbors], axis=0)
+        obs, mf = {}, {}
+        placements = {nid: np.array([1.0 if n.placed_services.get(i, False) else 0.0 for i in range(self.num_services)]) for nid, n in self.nodes.items()}
+        for nid, node in self.nodes.items():
+            history = self.node_request_history[nid]
+            if not history:
+                phi = np.zeros(self.num_services, dtype=np.float32)
             else:
-                mean_fields[node_id] = np.zeros(self.num_services, dtype=np.float32)
+                phi_sum = np.sum(np.array(list(history)), axis=0)
+                tot = max(1.0, np.sum(phi_sum))
+                phi = (phi_sum / tot).astype(np.float32)
                 
-        return observations, mean_fields
-
-    # =========================================================================
-    #  LOWER LEVEL: Task Scheduling (Slot tau)
-    # =========================================================================
+            obs[nid] = np.concatenate([placements[nid], phi]).astype(np.float32)
+            neigh = [n for n in self.topo_manager.get_edge_nodes_by_depth(nid, cfg.MAX_DEPTH) if n in self.nodes]
+            mf[nid] = np.mean([placements[n] for n in neigh], axis=0) if neigh else np.zeros(self.num_services, dtype=np.float32)
+        return obs, mf
 
     def step_lower(self, actions_map: Dict[str, int]):
-        """
-        Xử lý Scheduling trong 1 Time Slot.
-        actions_map: {terminal_id: discrete_action_id}
-        """
-        slot_energy = 0.0
-        slot_qos_violations = 0
-        slot_arrival_tasks = 0
+        slot_energy, slot_violations, slot_success, slot_avg_arrival = 0.0, 0, 0, 0
+        node_slot_energy = defaultdict(float)
+        node_slot_violations = defaultdict(int)
         arrivals_A = defaultdict(float)
-        
-        # 1. Decode Actions & Transmission
-        self.last_terminal_actions.clear()
+        slot_request_counts = {nid: np.zeros(self.num_services) for nid in self.nodes}
         node_list = sorted(self.nodes.keys())
 
-        for tid, action_id in actions_map.items():
-            # Decode: Action_ID -> (Node_Index, Model_Index)
-            node_idx = action_id // self.max_models_total
-            model_idx = action_id % self.max_models_total
-            target_node_id = node_list[node_idx]
+        for tid, action_tuple in actions_map.items():
+            # action_tuple is (node_idx, model_idx)
+            node_idx, model_idx = action_tuple
+            target_nid = node_list[node_idx]
+            self.last_terminal_actions[tid] = np.zeros(self.mf_lower_dim, dtype=np.float32)
+            self.last_terminal_actions[tid][node_idx] = 1.0
+            self.last_terminal_actions[tid][self.num_nodes_total + model_idx] = 1.0
             
-            # Tracking Action cho Mean Field
-            action_vec = np.zeros(self.mf_lower_dim, dtype=np.float32)
-            action_vec[node_idx] = 1.0
-            action_vec[self.num_nodes_total + model_idx] = 1.0
-            self.last_terminal_actions[tid] = action_vec
-            
-            # Logic xử lý task
-            term = self.terminals[tid]
-            task = term.current_task
+            task = self.terminals[tid].current_task
             if task:
-                slot_arrival_tasks += 1
-                self.node_request_history[target_node_id][task.service_id] += 1
-                
-                if target_node_id in self.nodes:
-                    node = self.nodes[target_node_id]
-                    svc_profile = self.service_config[task.service_id]
+                slot_avg_arrival += 1
+                slot_request_counts[target_nid][task.service_id] += 1
+                if target_nid in self.nodes:
+                    svc = self.service_config[task.service_id]
+                    m_idx = model_idx % len(svc['models'])
+                    unit_load = svc['models'][m_idx]['workload']
+                    task.assign_schedule(target_nid, m_idx, unit_load)
+                    arrivals_A[(target_nid, task.service_id)] += (unit_load * task.batch_size)
+                    meta = self.channel_model.get_metadata(self.terminals[tid].edge_id, target_nid, task.total_data_size_mb)
                     
-                    # Cấp phát Model & Workload (Đảm bảo model_idx hợp lệ cho service này)
-                    actual_model_idx = model_idx % len(svc_profile['models'])
-                    model_info = svc_profile['models'][actual_model_idx]
-                    model_workload = model_info['workload'] * task.batch_size
-                    task.assign_schedule(target_node_id, actual_model_idx, model_workload)
-                    arrivals_A[(target_node_id, task.service_id)] += model_workload
-
-                    # Transmission
-                    meta = self.channel_model.get_metadata(term.edge_id, target_node_id, task.total_data_size_mb)
-                    task.transmission_delay = meta['tranmission_delay']
-                    slot_energy += meta['transmission_energy'] 
+                    e_trans = meta['transmission_energy']
+                    slot_energy += e_trans
+                    node_slot_energy[target_nid] += e_trans
                     
-                    if not node.admit_task(task):
-                        slot_qos_violations += 1
+                    if not self.nodes[target_nid].admit_task(task): 
+                        slot_violations += 1
+                        node_slot_violations[target_nid] += 1
 
-        # 2. Node Processing (KKT Resource Allocation)
-        current_abs_time = self.time_manager.to_abs_time(self.time_manager.current_slot)
+        curr_time = self.time_manager.to_abs_time(self.time_manager.current_slot)
         queues_before = {nid: node.backlogs.copy() for nid, node in self.nodes.items()}
-
-        for node in self.nodes.values():
-            done_tasks, n_energy = node.process_timeslot(current_abs_time, self.time_manager.slot_duration)
-            slot_energy += n_energy
-            self.total_completed_tasks += len(done_tasks)
-            for t in done_tasks:
-                if not t.qos_status: slot_qos_violations += 1
-
-        # 3. Lyapunov F1 Calculation (Eq. 23)
-        drift_term = 0.0
         for nid, node in self.nodes.items():
+            done, n_e = node.process_timeslot(curr_time, self.time_manager.slot_duration)
+            slot_energy += n_e
+            node_slot_energy[nid] += n_e
+            self.total_completed_tasks += len(done)
+            for t in done:
+                if t.qos_status: slot_success += 1
+                else: 
+                    slot_violations += 1
+                    node_slot_violations[nid] += 1
+
+        # F1_tau = Drift + V*Energy. 
+        v_energy = 8e8 
+        total_f1 = 0.0
+        for nid in self.nodes:
+            node_drift = 0.0
             for sid in range(self.num_services):
-                Q = queues_before[nid].get(sid, 0.0)
-                A = arrivals_A.get((nid, sid), 0.0)
-                W = node.last_cpu_allocations.get(sid, 0.0) * self.time_manager.slot_duration
-                drift_term += Q * (A - W)
+                Q, A = queues_before[nid].get(sid, 0.0), arrivals_A.get((nid, sid), 0.0)
+                W = self.nodes[nid].last_cpu_allocations.get(sid, 0.0) * self.time_manager.slot_duration
+                node_drift += Q * (A - W)
+            
+            node_f1 = node_drift + (v_energy * node_slot_energy[nid])
+            self.node_frame_F1_acc[nid] += node_f1
+            self.node_frame_violations_acc[nid] += node_slot_violations[nid]
+            total_f1 += node_f1
 
-        F1_tau = drift_term + (cfg.lypa_coef * slot_energy)
-        self.frame_F1_accumulation += F1_tau
-
-        # 4. Update & Feedback
+        self.frame_F1_accumulation += total_f1
+        self.frame_violations_accumulation += slot_violations
+        self.total_energy += slot_energy
+        self.total_violations += slot_violations
+        
+        for nid in self.nodes:
+            self.node_request_history[nid].append(slot_request_counts[nid])
+            
         self.time_manager.tick()
-        if not self.time_manager.is_done():
-            self.workload_gen.step(self.time_manager.current_slot)
+        if not self.time_manager.is_done(): self.workload_gen.step(self.time_manager.current_slot)
 
         next_obs, next_mf, _ = self._get_lower_obs()
         
-        # Lower Reward (Eq. 53). Scale 1e-8.
-        raw_rewards = self._calculate_lower_reward(F1_tau, slot_qos_violations)
-        scaled_rewards = {tid: r * 1e-8 for tid, r in raw_rewards.items()}
-
+        r_drift = -np.clip(total_f1 * 5e-10, -30.0, 30.0) 
+        r_vio = -slot_violations * 30.0            
+        r_success = slot_success * 20.0           
+        
+        total_r = r_drift + r_vio + r_success
+        rewards = {tid: total_r for tid in self.terminals}
+        
         info = {
-            "energy": slot_energy, "violations": slot_qos_violations,
-            "F1_tau": F1_tau, "drift_term": drift_term,
-            "arrival_tasks": slot_arrival_tasks,
-            "is_new_frame": self.time_manager.is_new_frame()
+            "energy": slot_energy, "violations": slot_violations, "success": slot_success,
+            "arrival_tasks": slot_avg_arrival, "F1_tau": total_f1,
+            "is_new_frame": self.time_manager.is_new_frame(),
+            "is_done": self.time_manager.is_done()
         }
-        
-        # --- EXPORT DATA CHO DASHBOARD ---
-        self.export_live_state(info)
-        
-        return next_obs, scaled_rewards, self.time_manager.is_done(), info
-
-    def export_live_state(self, info):
-        """Xuất trạng thái hệ thống ra JSON cho Streamlit Dashboard"""
-        import json
-        import os
-        
-        state = {
-            "step": self.time_manager.current_slot,
-            "global_energy": info['energy'],
-            "qos_violations": info['violations'],
-            "completed_tasks": self.total_completed_tasks,
-            "incoming_tasks": info.get('arrival_tasks', 0),
-            "nodes": [],
-            "links": []
-        }
-        
-        # 1. Trạng thái Node
-        for nid, node in self.nodes.items():
-            total_backlog = sum(node.backlogs.values())
-            # Tính độ tải dựa trên backlog so với 1 ngưỡng (ví dụ 5000 GFLOPS)
-            load_factor = min(1.0, total_backlog / 5000.0) 
-            
-            state["nodes"].append({
-                "id": nid,
-                "type": node.type,
-                "cpu_util": load_factor,
-                "backlog": total_backlog,
-                "active_services": [sid for sid, active in node.placed_services.items() if active]
-            })
-            
-        # 2. Topology Links
-        for u, v in self.topo_manager.graph.edges():
-            if u in self.nodes and v in self.nodes:
-                state["links"].append({"source": u, "target": v})
-                
-        # Lưu file
-        os.makedirs("data", exist_ok=True)
-        with open("data/live_state.json", "w") as f:
-            json.dump(state, f)
-            
-        # Lưu history để vẽ đồ thị
-        history_file = "data/history.csv"
-        import pandas as pd
-        new_row = pd.DataFrame([{
-            "step": state["step"],
-            "total_energy": state["global_energy"],
-            "qos_violations": state["qos_violations"]
-        }])
-        if not os.path.exists(history_file):
-            new_row.to_csv(history_file, index=False)
-        else:
-            new_row.to_csv(history_file, mode='a', header=False, index=False)
+        return next_obs, rewards, self.time_manager.is_done(), info
 
     def _get_lower_obs(self):
-        """Eq. 51: State của Lower Agent (Terminal) kèm Action Mask."""
-        observations, mean_fields, masks = {}, {}, {}
-        node_ids = sorted(self.nodes.keys())
-        
-        # Network State Snapshot
-        net_snapshot = {}
+        obs, mf, masks = {}, {}, {}
+        nids = sorted(self.nodes.keys())
+        net = {}
+        # thống kê lại q backlock và last_f_allocation cho từng service 
         for sid in range(self.num_services):
             states = []
-            for nid in node_ids:
-                states.extend(self.nodes[nid].get_observation_state(sid))
-            net_snapshot[sid] = np.array(states, dtype=np.float32)
-
-        # Mean Field (Edge-based grouping)
-        edge_groups = defaultdict(list)
-        for tid, term in self.terminals.items(): edge_groups[term.edge_id].append(tid)
+            qs, fs = [], []
+            for nid in nids:
+                q, f = self.nodes[nid].get_observation_state(sid)
+                qs.append(np.log10(1+q)/6.0)
+                fs.append(f)
+            states.extend(qs + fs)
+            net[sid] = np.array(states, dtype=np.float32)
         
-        for tid, term in self.terminals.items():
-            task = term.current_task
-            mask = np.ones(self.lower_action_dim, dtype=np.float32) # Mặc định cho phép (nếu không có task)
-            
+        edge_groups = defaultdict(list)
+        for tid, t in self.terminals.items(): edge_groups[t.edge_id].append(tid)
+        
+        for tid, t in self.terminals.items():
+            task = t.current_task
             if task is None:
-                observations[tid] = np.zeros(self.lower_state_dim, dtype=np.float32)
+                obs[tid], msk = np.zeros(self.lower_state_dim, dtype=np.float32), np.ones(self.lower_action_dim, dtype=np.float32)
             else:
-                local = np.array([task.total_data_size_mb, task.deadline, float(task.omega), task.min_accuracy])
-                observations[tid] = np.concatenate([local, net_snapshot[task.service_id]])
+                loc = np.array([np.log10(1+task.total_data_size_mb)/3.0, min(1.0, task.deadline/15.0), float(task.omega), task.min_accuracy/100.0])
+                obs[tid] = np.concatenate([loc, net[task.service_id]])
+                msk = np.zeros(self.lower_action_dim, dtype=np.float32)
                 
-                # Tạo Mask: Chỉ cho phép các Node đã đặt Service này
-                mask = np.zeros(self.lower_action_dim, dtype=np.float32)
-                for n_idx, nid in enumerate(node_ids):
-                    if self.nodes[nid].placed_services.get(task.service_id, False):
-                        # Bật mask cho tất cả các model của node hợp lệ này
-                        start_idx = n_idx * self.max_models_total
-                        end_idx = start_idx + self.max_models_total
-                        mask[start_idx:end_idx] = 1.0
+                # Branch 0: Node selection
+                for i, nid in enumerate(nids):
+                    if self.nodes[nid].placed_services.get(task.service_id):
+                        msk[i] = 1.0
                 
-                # Trường hợp xấu nhất (không node nào cài service): cho phép Cloud Nodes 
-                # để tránh cộng tổng bằng 0 khi Softmax
-                if np.sum(mask) == 0:
-                    for n_idx, nid in enumerate(node_ids):
-                        if nid in self.cloud_node_ids:
-                            mask[n_idx * self.max_models_total : (n_idx+1) * self.max_models_total] = 1.0
-
-            masks[tid] = mask
-            
-            # MF là trung bình hành động của các terminal trong cùng vùng Edge
-            group = edge_groups[term.edge_id]
-            mean_fields[tid] = np.mean([self.last_terminal_actions[gtid] for gtid in group], axis=0)
-
-        return observations, mean_fields, masks
-
-    def _calculate_lower_reward(self, F1_tau, violations):
-        """Eq. 53: Reward = -[F1 + QoS_Penalty]"""
-        w1, w2 = cfg.neuron_net.get("OMEGA_Q1", 1000), cfg.neuron_net.get("OMEGA_Q2", 0.12)
-        penalty = w1 * np.exp(w2 * violations)
-        reward = -(F1_tau + penalty)
-        return {tid: reward for tid in self.terminals}
+                # Nếu không có node nào host service, cho Cloud handle (fallback)
+                if np.sum(msk[:self.num_nodes_total]) == 0:
+                    for i, nid in enumerate(nids):
+                        if nid in self.cloud_node_ids: msk[i] = 1.0
+                
+                # Branch 1: Model selection
+                svc = self.service_config[task.service_id]
+                num_models = len(svc['models'])
+                msk[self.num_nodes_total : self.num_nodes_total + num_models] = 1.0
+                
+            masks[tid], group = msk, edge_groups[t.edge_id]
+            mf[tid] = np.mean([self.last_terminal_actions[gtid] for gtid in group], axis=0) 
+        return obs, mf, masks

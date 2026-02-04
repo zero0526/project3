@@ -12,9 +12,10 @@ class HMFD3QN_Trainer:
         self.upper_agents = {
             node_id: MFD3QNAgent(
                 state_dim=env.upper_state_dim,
-                action_dim=2**env.num_services, # Mỗi node chọn 1 trong các tổ hợp placement
+                action_dim=env.upper_action_dim,
                 mf_dim=env.num_services,
-                is_upper=True
+                is_upper=True,
+                branch_dims=[env.num_services]
             ) for node_id in env.agent_node_ids
         }
         
@@ -24,21 +25,24 @@ class HMFD3QN_Trainer:
                 state_dim=env.lower_state_dim,
                 action_dim=env.lower_action_dim,
                 mf_dim=env.mf_lower_dim,
-                is_upper=False
+                is_upper=False,
+                branch_dims=[env.num_nodes_total, env.max_models_total]
             ) for term_id in env.terminals.keys()
         }
 
     def _action_to_placement_vec(self, action_id):
-        """Chuyển đổi index action sang vector binary [0, 1, 0...]"""
-        binary_str = format(action_id, f'0{self.num_services}b')
-        return [int(b) for b in binary_str]
+        """Chuyển đổi index action sang vector binary [0, 1, 0...] (One-hot)"""
+        vec = [0] * self.num_services
+        if action_id < self.num_services:
+            vec[action_id] = 1
+        return vec
 
     def train(self, num_episodes):
         for ep in range(num_episodes):
             # Reset Environment
             upper_obs, upper_mf = self.env.reset()
-            # Khởi tạo MF_prev (m_hat_{t-1}) bằng vector 0 cho bước đầu
-            prev_upper_mf = {nid: np.zeros(self.num_services) for nid in self.env.agent_node_ids}
+            # Khởi tạo MF_prev (m_hat_{t-1}) bằng quan sát ban đầu
+            prev_upper_mf = {nid: upper_mf[nid].copy() for nid in self.env.agent_node_ids}
             prev_lower_mf = {tid: np.zeros(self.env.mf_lower_dim) for tid in self.env.terminals}
 
             done = False
@@ -112,9 +116,9 @@ class HMFD3QN_Trainer:
     def save_models(self, path="models/"):
         import os
         if not os.path.exists(path):
-            os.makedirs(path)
+            os.makedirs(path, exist_ok=True)
         for nid, agent in self.upper_agents.items():
-            torch.save(agent.q_eval.state_dict(), f"{path}/upper_{nid}.pth")
+            agent.save_model(f"{path}/upper_{nid}.pth")
         for tid, agent in self.lower_agents.items():
-            torch.save(agent.q_eval.state_dict(), f"{path}/lower_{tid}.pth")
+            agent.save_model(f"{path}/lower_{tid}.pth")
         print(f"Models saved to {path}")

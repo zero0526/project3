@@ -51,21 +51,20 @@ class Task:
         self.computation_delay = 0.0
         self.cold_start_delay = 0.0 
 
-    def assign_schedule(self, node_id, model_idx, model_workload_per_batch: float):
+    def assign_schedule(self, node_id, model_idx, unit_workload: float):
         """
         Gán quyết định từ Agent (Lower-level) cho Task.
         
         Args:
             node_id: ID nút tính toán được chọn (v).
             model_idx: Index của model được chọn trong danh sách model của service này.
-            model_workload_per_batch: Khối lượng tính toán (GFLOPS) để xử lý 1 batch 
-                                      (tương ứng với Model đã chọn).
+            unit_workload: Khối lượng tính toán (GFLOPS) để xử lý 1 đơn vị dữ liệu (1 item).
         """
         self.assigned_node_id = node_id
         self.selected_model_idx = model_idx
         
-        # Công thức (12): Tổng Workload = Workload_per_batch * Batch_size
-        self.required_workload_gflops = model_workload_per_batch * self.batch_size
+        # Công thức (12): Tổng Workload = unit_workload * Batch_size
+        self.required_workload_gflops = unit_workload * self.batch_size
 
     @property
     def total_delay(self):

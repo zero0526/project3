@@ -20,43 +20,54 @@ class SimulationMonitor:
         """
         Ghi log trạng thái hiện tại của Environment.
         """
-        # 1. Trích xuất dữ liệu Nodes
+        # 1. Trích xuất dữ liệu Nodes (Tất cả nodes trong topology)
         nodes_data = []
         total_backlog = 0
         total_capacity = 0
         
-        for nid, node in env.nodes.items():
-            # Tính CPU Utilization %
-            current_load = sum(node.backlogs.values())
-            capacity = node.cpu_capacity
-            utilization = min(current_load / capacity, 1.0) if capacity > 0 else 0
+        # Lấy tất cả node từ topology graph để hiển thị toàn bộ
+        for nid, data in env.topo_manager.graph.nodes(data=True):
+            node = env.nodes.get(nid)
             
-            total_backlog += current_load
-            total_capacity += capacity
-            
-            # Danh sách dịch vụ đang active (Binary vector)
-            # Giả sử có tối đa 10 service để hiển thị đẹp
-            active_services = [int(sid) for sid, active in node.placed_services.items() if active]
+            if node:
+                # Node có khả năng tính toán (Cloud, Edge, Network)
+                current_load = sum(node.backlogs.values())
+                capacity = node.cpu_capacity
+                utilization = min(current_load / capacity, 1.0) if capacity > 0 else 0
+                active_services = [int(sid) for sid, active in node.placed_services.items() if active]
+                energy = getattr(node, 'last_energy', 0.0)
+                
+                total_backlog += current_load
+                total_capacity += capacity
+            else:
+                # Node trung chuyển hoặc Terminal (nếu có trong graph)
+                current_load = 0
+                capacity = 0
+                utilization = 0
+                active_services = []
+                energy = 0
             
             nodes_data.append({
                 "id": nid,
-                "type": node.type,
+                "type": data.get('type', 'relay'),
                 "cpu_util": utilization,
                 "backlog": current_load,
+                "capacity": capacity,
+                "energy": energy,
                 "active_services": active_services
             })
 
         # 2. Trích xuất Topology (Links)
         links_data = []
-        for u, v in env.topo.graph.edges():
+        for u, v in env.topo_manager.graph.edges():
             links_data.append({"source": u, "target": v})
 
         # 3. Tạo Snapshot JSON
         snapshot = {
             "step": step,
             "global_energy": env.total_energy,
-            "qos_violations": env.qos_violations,
-            "completed_tasks": env.completed_tasks,
+            "qos_violations": env.total_violations,
+            "completed_tasks": env.total_completed_tasks,
             "nodes": nodes_data,
             "links": links_data,
             "last_reward": info.get('reward', 0)
@@ -64,9 +75,19 @@ class SimulationMonitor:
         
         # Ghi đè file JSON (Atomic write để tránh lỗi khi Dashboard đang đọc)
         temp_file = self.state_file + ".tmp"
-        with open(temp_file, 'w') as f:
-            json.dump(snapshot, f)
-        os.replace(temp_file, self.state_file)
+        try:
+            with open(temp_file, 'w') as f:
+                json.dump(snapshot, f)
+            # Trên Windows, os.replace có thể lỗi nếu dashboard đang đọc file
+            if os.path.exists(self.state_file):
+                try:
+                    os.replace(temp_file, self.state_file)
+                except PermissionError:
+                    pass # Bỏ qua bước này nếu file đang bị lock, bước sau sẽ cập nhật tiếp
+            else:
+                os.rename(temp_file, self.state_file)
+        except Exception:
+            pass
 
         # 4. Ghi nối file CSV
         avg_util = total_backlog / total_capacity if total_capacity > 0 else 0
@@ -75,7 +96,7 @@ class SimulationMonitor:
             writer.writerow([
                 step, 
                 env.total_energy, 
-                env.qos_violations, 
-                env.completed_tasks,
+                env.total_violations, 
+                env.total_completed_tasks,
                 avg_util
             ])

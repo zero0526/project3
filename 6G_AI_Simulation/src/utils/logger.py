@@ -2,7 +2,11 @@ import logging
 import os
 import sys
 
-def setup_logger(name="6G_Sim", log_file="data/logs/simulation.log", level=logging.INFO):
+# Windows console encoding fix
+if sys.platform == 'win32' and hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
+def setup_logger(name="6G_Sim", log_file="data/logs/simulation.log", level=logging.INFO, mode='a'):
     """
     Thiết lập cấu hình logging chuẩn cho toàn bộ dự án.
     
@@ -27,7 +31,7 @@ def setup_logger(name="6G_Sim", log_file="data/logs/simulation.log", level=loggi
     )
 
     # 3. Handler 1: Ghi ra File
-    file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
+    file_handler = logging.FileHandler(log_file, mode=mode, encoding='utf-8')
     file_handler.setFormatter(formatter)
 
     # 4. Handler 2: In ra Console (Terminal)
