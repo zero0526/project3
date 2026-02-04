@@ -25,9 +25,13 @@ class ReplayBuffer:
         batch = random.sample(self.buffer, batch_size)
         state, action, reward, next_state, done, mf, next_mf = zip(*batch)
 
+        act_tensor = torch.LongTensor(np.array(action)).to(cfg.device)
+        if act_tensor.dim() == 1:
+            act_tensor = act_tensor.unsqueeze(1)
+
         return (
             torch.FloatTensor(np.array(state)).to(cfg.device),
-            torch.LongTensor(np.array(action)).unsqueeze(1).to(cfg.device),
+            act_tensor,
             torch.FloatTensor(np.array(reward)).unsqueeze(1).to(cfg.device),
             torch.FloatTensor(np.array(next_state)).to(cfg.device),
             torch.FloatTensor(np.array(done)).unsqueeze(1).to(cfg.device),
@@ -308,11 +312,13 @@ class MFD3QNAgent(HMFD3QNBaseAgent):
             start_idx = 0
             for i, b_dim in enumerate(self.branch_dims):
                 b_q_vals = q_vals_all[:, start_idx : start_idx + b_dim]
+                # b_actions must be [batch, 1] for gather
                 b_actions = actions[:, i : i + 1]
                 current_q_list.append(b_q_vals.gather(1, b_actions))
                 start_idx += b_dim
             current_q = torch.cat(current_q_list, dim=1).mean(dim=1, keepdim=True)
         else:
+            # single action case: actions is [batch, 1]
             current_q = q_vals_all.gather(1, actions)
             
         q_loss = nn.MSELoss()(current_q, target_q)
