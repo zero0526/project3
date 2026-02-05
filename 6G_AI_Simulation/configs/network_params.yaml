@@ -39,7 +39,7 @@ lypa_coef: 1e5
 cold_start_time:
   min: 0.15 #s
   max: 0.85
-avg_req: 10 #per slot
+avg_req: 20 #per slot
 MAX_DEPTH: 2
 coordinate:
   atlanta:

@@ -1,5 +1,6 @@
 import torch
 import numpy as np
+import pandas as pd
 import time
 import os
 import json
@@ -10,6 +11,29 @@ from src.utils.logger import setup_logger
 
 # Thiết lập logger chi tiết cho việc test và tính chỉnh hyperparameter
 test_logger = setup_logger(name="Agent_Test", log_file="data/logs/agent_test.log", mode='w')
+
+def setup_training_hyperparams(num_episodes):
+    """Cấu hình các tham số học tập tối ưu cho số lượng episode cụ thể"""
+    params = {}
+    params['num_episodes'] = num_episodes
+    params['lr_q'] = 1e-4
+    params['lr_mf'] = 1e-4
+    
+    # Khởi tạo tham số annealing nhiệt độ (Boltzmann)
+    params['initial_temp'] = 0.5
+    params['final_temp'] = 0.05
+    params['annealing_steps'] = int(num_episodes * 0.7)
+    params['temp_decay'] = (params['initial_temp'] - params['final_temp']) / params['annealing_steps']
+    
+    # Khởi tạo epsilon (Epsilon-greedy)
+    params['initial_eps'] = 0.4
+    params['eps_decay_end'] = int(num_episodes * 0.5)
+    
+    # Cấu hình học tập (Decay)
+    params['lr_decay_step'] = max(20, num_episodes // 3)
+    params['lr_decay_factor'] = 0.5
+    
+    return params
 
 def test_and_tune():
     test_logger.info("="*50)
@@ -42,45 +66,33 @@ def test_and_tune():
     
     test_logger.info("Đã xóa file history và log cũ để bắt đầu đợt mới.")
 
-    # 4. Cấu hình hyperparams cho Demo 30 Epoch
-    num_episodes = 300 
-    cfg.neuron_net['LR_Q'] = 3e-4 # Tăng nhẹ để học nhanh hơn
-    cfg.neuron_net['LR_MF'] = 1e-4 
+    # 4. Cấu hình hyperparams cho 150 Epoch
+    hparams = setup_training_hyperparams(num_episodes=150)
+    num_episodes = hparams['num_episodes']
+    
+    # Cập nhật cấu hình vào cfg để các Agent nhận diện
+    cfg.neuron_net['LR_Q'] = hparams['lr_q']
+    cfg.neuron_net['LR_MF'] = hparams['lr_mf']
     
     test_logger.info(f"Cấu hình Test: Episodes={num_episodes}, Device={cfg.device}")
-    test_logger.info(f"Hyperparams: Gamma={cfg.neuron_net.get('GAMMA')}, LR_Q={cfg.neuron_net.get('LR_Q')}")
+    test_logger.info(f"Hyperparams: LRs=({hparams['lr_q']}, {hparams['lr_mf']}), Epsilon={hparams['initial_eps']}")
     
-    # Khởi tạo tham số annealing (Nhanh hơn để thể hiện sự hội tụ sớm)
-    initial_temp = 0.4 
-    final_temp = 0.01 
-    annealing_steps = int(num_episodes * 0.6)  
-    temp_decay = (initial_temp - final_temp) / annealing_steps
-
-    current_temp = initial_temp
-
-    # Khởi tạo epsilon (Khám phá ngẫu nhiên)
-    # Epsilon sẽ giảm về 0 sau 50% số episode
-    initial_eps = 0.2
-    eps_decay_end = int(num_episodes * 0.5)
-
-    # Checkpointing & Decay Params
+    current_temp = hparams['initial_temp']
     best_violation_rate = float('inf')
-    lr_decay_step = 100 # Chạy 30 ep thì chưa cần giảm LR để agent học sâu
-    lr_decay_factor = 0.5
 
     # 5. Vòng lặp huấn luyện chính
     for ep in range(num_episodes):
         # LR Decay
-        if ep > 0 and ep % lr_decay_step == 0:
+        if ep > 0 and ep % hparams['lr_decay_step'] == 0:
             for nid in env.agent_node_ids:
-                new_lr = trainer.upper_agents[nid].decay_lr(lr_decay_factor)
+                new_lr = trainer.upper_agents[nid].decay_lr(hparams['lr_decay_factor'])
             for tid in env.terminals:
-                new_lr = trainer.lower_agents[tid].decay_lr(lr_decay_factor)
+                new_lr = trainer.lower_agents[tid].decay_lr(hparams['lr_decay_factor'])
             test_logger.info(f"--- LEARNING RATE DECAY: New LR = {new_lr:.6f} ---")
 
         # Epsilon Decay
-        if ep < eps_decay_end:
-            current_eps = initial_eps * (1 - ep / eps_decay_end)
+        if ep < hparams['eps_decay_end']:
+            current_eps = hparams['initial_eps'] * (1 - ep / hparams['eps_decay_end'])
         else:
             current_eps = 0.0
 
@@ -109,12 +121,14 @@ def test_and_tune():
             frame_idx += 1
             # --- UPPER LEVEL ---
             placement_actions = {}
+            upper_action_ids = {}
             for nid in env.agent_node_ids:
                 # Dùng m_{t-1} để dự đoán m_t và chọn action
                 action_id, _ = trainer.upper_agents[nid].get_action(
                     upper_obs[nid], prev_upper_mf[nid], temperature=current_temp, eps=current_eps
                 )
                 placement_actions[nid] = trainer._action_to_placement_vec(action_id)
+                upper_action_ids[nid] = action_id
             
             env.step_upper(placement_actions)
 
@@ -183,8 +197,8 @@ def test_and_tune():
             # Train Upper Agents
             for nid, agent in trainer.upper_agents.items():
                 reward_nid = upper_rewards.get(nid, 0.0)
-                # placement_actions[nid] là one-hot, ta lấy index để lưu vào memory
-                action_id = np.argmax(placement_actions[nid])
+                # Lấy lại action_id đã chọn ở đầu frame
+                action_id = upper_action_ids[nid]
                 # Lưu tuple: (s_t, a_t, r_t, s_{t+1}, done, m_{t-1}, m_t)
                 agent.memory.push(
                     upper_obs[nid], action_id, reward_nid,
@@ -201,7 +215,7 @@ def test_and_tune():
             current_upper_mf = next_upper_mf_obs # Đây là m_t cho frame sau
         
         # Annealing temperature
-        current_temp = max(final_temp, current_temp - temp_decay)
+        current_temp = max(hparams['final_temp'], current_temp - hparams['temp_decay'])
 
         duration = time.time() - start_time
         violation_rate = (ep_total_violations / ep_total_tasks) if ep_total_tasks > 0 else 1.0
@@ -222,7 +236,7 @@ def test_and_tune():
                 trainer.lower_agents[tid].save_model(f"{checkpoint_dir}/lower_{tid}.pth")
 
         # --- LOG TO CSV FOR STREAMLIT ---
-        import pandas as pd
+        
         history_file = "data/training_history.csv"
         avg_q_loss = np.mean(ep_q_losses) if ep_q_losses else 0
         avg_mf_loss = np.mean(ep_mf_losses) if ep_mf_losses else 0

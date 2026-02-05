@@ -15,7 +15,7 @@ class HMFD3QN_Trainer:
                 action_dim=env.upper_action_dim,
                 mf_dim=env.num_services,
                 is_upper=True,
-                branch_dims=[env.num_services]
+                branch_dims=None
             ) for node_id in env.agent_node_ids
         }
         
@@ -26,19 +26,28 @@ class HMFD3QN_Trainer:
                 action_dim=env.lower_action_dim,
                 mf_dim=env.mf_lower_dim,
                 is_upper=False,
-                branch_dims=[env.num_nodes_total, env.max_models_total]
+                branch_dims=None
             ) for term_id in env.terminals.keys()
         }
 
     def _action_to_placement_vec(self, action_id):
-        """Chuyển đổi index action sang vector binary [0, 1, 0...] (One-hot)"""
-        vec = [0] * self.num_services
-        if action_id < self.num_services:
-            vec[action_id] = 1
-        return vec
+        """Chuyển đổi integer action_id sang vector binary [0, 1, 0...] (Multi-hot bitmask)"""
+        # bit 0 là service 0, bit 1 là service 1...
+        return [(action_id >> i) & 1 for i in range(self.num_services)]
 
     def train(self, num_episodes):
+        # Thiết lập tham số epsilon-greedy kết hợp Boltzmann
+        eps_start = 1.0
+        eps_end = 0.0 # Sau 1/2 số ep sẽ chuyển hẳn sang Boltzmann (eps=0)
+        decay_period = num_episodes // 2 
+
         for ep in range(num_episodes):
+            # Tính epsilon: Giảm dần về 0 trong 1/2 số episode đầu
+            if ep < decay_period:
+                eps = eps_start - (eps_start - eps_end) * (ep / decay_period)
+            else:
+                eps = eps_end
+
             # Reset Environment
             upper_obs, upper_mf = self.env.reset()
             # Khởi tạo MF_prev (m_hat_{t-1}) bằng quan sát ban đầu
@@ -51,12 +60,14 @@ class HMFD3QN_Trainer:
                 placement_actions = {}
                 current_upper_mf = {}
                 
+                upper_action_ids = {}
                 for nid in self.env.agent_node_ids:
-                    # Select Action (Placement)
+                    # Select Action (Placement) - Thêm eps vào
                     action_id, mf_pred = self.upper_agents[nid].get_action(
-                        upper_obs[nid], prev_upper_mf[nid], temperature=1.0
+                        upper_obs[nid], prev_upper_mf[nid], temperature=1.0, eps=eps
                     )
                     placement_actions[nid] = self._action_to_placement_vec(action_id)
+                    upper_action_ids[nid] = action_id
                     current_upper_mf[nid] = mf_pred
                 
                 # Apply Placement vào môi trường
@@ -69,9 +80,12 @@ class HMFD3QN_Trainer:
                     
                     terminal_actions = {}
                     for tid, agent in self.lower_agents.items():
-                        # Lấy quan sát và thực hiện action scheduling (Có kèm Mask)
+                        # Lấy quan sát và thực hiện action scheduling (Có kèm Mask và Eps)
                         if lower_obs[tid] is not None:
-                            action_id, _ = agent.get_action(lower_obs[tid], lower_mf_obs[tid], mask=lower_mask_obs[tid])
+                            action_id, _ = agent.get_action(
+                                lower_obs[tid], lower_mf_obs[tid], 
+                                mask=lower_mask_obs[tid], eps=eps
+                            )
                             terminal_actions[tid] = action_id
                         else:
                             terminal_actions[tid] = 0 # Dummy action if no task
@@ -96,8 +110,8 @@ class HMFD3QN_Trainer:
                 next_upper_obs, next_upper_mf_obs, upper_reward = self.env.get_upper_feedback()
                 
                 for nid, agent in self.upper_agents.items():
-                    # Chuyển placement_actions[nid] ngược lại thành action_id để lưu buffer
-                    action_id = int("".join(map(str, placement_actions[nid])), 2)
+                    # Lấy lại action_id đã chọn ở đầu frame
+                    action_id = upper_action_ids[nid]
                     
                     agent.memory.push(
                         upper_obs[nid], action_id, upper_reward,
@@ -111,7 +125,7 @@ class HMFD3QN_Trainer:
                 upper_mf = next_upper_mf_obs
                 prev_upper_mf = next_upper_mf_obs # Dùng cho m_hat_{t-1}
 
-            print(f"Episode {ep+1}/{num_episodes} completed. Frame Reward: {upper_reward:.2f}")
+            print(f"Episode {ep+1}/{num_episodes} completed. Eps: {eps:.2f}, Frame Reward: {upper_reward:.2f}")
 
     def save_models(self, path="models/"):
         import os

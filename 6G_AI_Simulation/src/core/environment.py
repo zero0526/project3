@@ -47,10 +47,10 @@ class SixGEnvironment:
         self.max_models_total = max([len(svc['models']) for svc in service_config])
         
         self.upper_state_dim = 2 * self.num_services
-        self.upper_action_dim = self.num_services
+        self.upper_action_dim = 1 << self.num_services
         
         self.lower_state_dim = 4 + (2 * self.num_nodes_total) 
-        self.lower_action_dim = self.num_nodes_total + self.max_models_total
+        self.lower_action_dim = self.num_nodes_total * self.max_models_total
         self.mf_lower_dim = self.num_nodes_total + self.max_models_total
 
         self.current_episode = 0
@@ -149,10 +149,13 @@ class SixGEnvironment:
         slot_request_counts = {nid: np.zeros(self.num_services) for nid in self.nodes}
         node_list = sorted(self.nodes.keys())
 
-        for tid, action_tuple in actions_map.items():
-            # action_tuple is (node_idx, model_idx)
-            node_idx, model_idx = action_tuple
+        for tid, action_id in actions_map.items():
+            # action_id is a joint index [0, N*M - 1]
+            node_idx = action_id // self.max_models_total
+            model_idx = action_id % self.max_models_total
+            
             target_nid = node_list[node_idx]
+            # MF vector represents influence in N + M space
             self.last_terminal_actions[tid] = np.zeros(self.mf_lower_dim, dtype=np.float32)
             self.last_terminal_actions[tid][node_idx] = 1.0
             self.last_terminal_actions[tid][self.num_nodes_total + model_idx] = 1.0
@@ -191,7 +194,7 @@ class SixGEnvironment:
                     node_slot_violations[nid] += 1
 
         # F1_tau = Drift + V*Energy. 
-        v_energy = 8e8 
+        v_energy = 1e-5
         total_f1 = 0.0
         for nid in self.nodes:
             node_drift = 0.0
@@ -259,21 +262,22 @@ class SixGEnvironment:
                 loc = np.array([np.log10(1+task.total_data_size_mb)/3.0, min(1.0, task.deadline/15.0), float(task.omega), task.min_accuracy/100.0])
                 obs[tid] = np.concatenate([loc, net[task.service_id]])
                 msk = np.zeros(self.lower_action_dim, dtype=np.float32)
-                
-                # Branch 0: Node selection
-                for i, nid in enumerate(nids):
-                    if self.nodes[nid].placed_services.get(task.service_id):
-                        msk[i] = 1.0
-                
-                # Nếu không có node nào host service, cho Cloud handle (fallback)
-                if np.sum(msk[:self.num_nodes_total]) == 0:
-                    for i, nid in enumerate(nids):
-                        if nid in self.cloud_node_ids: msk[i] = 1.0
-                
-                # Branch 1: Model selection
+                # Unified masking for combined (Node, Model) space
                 svc = self.service_config[task.service_id]
                 num_models = len(svc['models'])
-                msk[self.num_nodes_total : self.num_nodes_total + num_models] = 1.0
+                
+                for i, nid in enumerate(nids):
+                    if self.nodes[nid].placed_services.get(task.service_id):
+                        # Mark all valid models on this node
+                        for m_idx in range(num_models):
+                            msk[i * self.max_models_total + m_idx] = 1.0
+                
+                # Fallback to Cloud if no Edge node has the service
+                if np.sum(msk) == 0:
+                    for i, nid in enumerate(nids):
+                        if nid in self.cloud_node_ids:
+                            for m_idx in range(num_models):
+                                msk[i * self.max_models_total + m_idx] = 1.0
                 
             masks[tid], group = msk, edge_groups[t.edge_id]
             mf[tid] = np.mean([self.last_terminal_actions[gtid] for gtid in group], axis=0) 
